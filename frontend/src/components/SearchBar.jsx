@@ -14,16 +14,54 @@ export default function SearchBar({ onResult }) {
       onResult(res)
     } catch (err) {
       console.error(err)
-      alert('Error running research')
+      alert('Error running research: ' + err.message)
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <form onSubmit={submit} style={{ display: 'flex', gap: 8 }}>
-      <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Company name or ticker" style={{ flex: 1, padding: 8 }} />
-      <button type="submit" disabled={loading} style={{ padding: '8px 12px' }}>{loading ? 'Researching...' : 'Research'}</button>
+    <form onSubmit={submit} style={{
+      display: 'flex',
+      gap: 12,
+      marginTop: 20,
+      marginBottom: 20,
+    }}>
+      <input
+        value={q}
+        onChange={(e) => setQ(e.target.value)}
+        placeholder="Enter company name or ticker (e.g., HDFC, TCS, SBI)"
+        style={{
+          flex: 1,
+          padding: '12px 16px',
+          borderRadius: 6,
+          border: '2px solid #e0e0e0',
+          fontSize: 14,
+          fontFamily: 'inherit',
+          transition: 'border-color 0.3s',
+          outline: 'none',
+        }}
+        onFocus={(e) => e.target.style.borderColor = '#3498db'}
+        onBlur={(e) => e.target.style.borderColor = '#e0e0e0'}
+      />
+      <button
+        type="submit"
+        disabled={loading || !q}
+        style={{
+          padding: '12px 24px',
+          borderRadius: 6,
+          border: 'none',
+          backgroundColor: loading ? '#95a5a6' : '#3498db',
+          color: 'white',
+          fontWeight: 'bold',
+          fontSize: 14,
+          cursor: loading || !q ? 'not-allowed' : 'pointer',
+          opacity: loading || !q ? 0.7 : 1,
+          transition: 'all 0.3s',
+        }}
+      >
+        {loading ? '⏳ Researching...' : '🔍 Research'}
+      </button>
     </form>
   )
 }

@@ -9,7 +9,7 @@ import fs from 'fs/promises'
 import path from 'path'
 // import { ChatOpenAI } from '@langchain/openai' // Commented out to use only Gemini
 import { ChatGoogleGenerativeAI } from '@langchain/google-genai'
-import { fetchFinancials, fetchNews, resolveTicker } from './dataFetchers.js'
+import { fetchFinancials, fetchNews, resolveTicker, fetchComprehensiveFinancials } from './dataFetchers.js'
 
 const OPENAI_MODEL = process.env.OPENAI_MODEL || 'gpt-3.5-turbo'
 // We'll use Gemini models only; OpenAI code remains commented out
@@ -126,7 +126,7 @@ async function invokeWithFallback(prompt) {
     throw err
   }
 
-  const modelName = process.env.GEMINI_MODEL || 'gemini-2.5-flash'
+  const modelName = process.env.GEMINI_MODEL || 'gemini-2.5-flash-lite'
   const maxRetries = 5
   let attempt = 0
   let delayMs = 1000 // start with 1 second
@@ -173,14 +173,24 @@ async function invokeWithFallback(prompt) {
 }
 
 // -------- Prompt & parsing (unchanged) --------
-const promptTemplate = `You are an AI investment research assistant.
+const promptTemplate = `You are an AI investment research assistant with expertise in fundamental analysis.
 
 Company: {company}
 Ticker: {ticker}
-Financials: {financials}
-Recent news: {news}
 
-Using the information above, choose one decision: INVEST or PASS.
+Financial Data (includes price, fundamentals, and valuation metrics):
+{financials}
+
+Recent news:
+{news}
+
+Using the comprehensive financial data and news above, analyze the investment opportunity:
+1. Evaluate valuation: Is P/E ratio reasonable for the industry and growth prospects?
+2. Assess fundamentals: Check profitability (EPS, dividend yield), market cap, 52-week performance
+3. Review news: Are there positive/negative catalysts or operational changes?
+4. Consider risk: Evaluate company strength and market conditions
+
+Choose one decision: INVEST or PASS.
 Provide a concise, factual answer. Produce a JSON object with these keys only:
 - decision
 - confidence (integer 0-100)
@@ -217,6 +227,44 @@ async function parseJsonResponse(text) {
 }
 
 /**
+ * Format financial data for better readability in the prompt.
+ */
+function formatFinancials(data) {
+  const parts = [];
+  
+  // Price Information
+  if (data.currentPrice) parts.push(`Current Price: ${data.currency || 'USD'} ${data.currentPrice}`);
+  if (data.highPrice) parts.push(`Day High: ${data.currency || 'USD'} ${data.highPrice}`);
+  if (data.lowPrice) parts.push(`Day Low: ${data.currency || 'USD'} ${data.lowPrice}`);
+  if (data.openPrice) parts.push(`Open Price: ${data.currency || 'USD'} ${data.openPrice}`);
+  if (data.previousClose) parts.push(`Previous Close: ${data.currency || 'USD'} ${data.previousClose}`);
+  
+  // 52-week range
+  if (data.fiftyTwoWeekHigh || data.fiftyTwoWeekLow) {
+    parts.push(`52-Week Range: ${data.currency || 'USD'} ${data.fiftyTwoWeekLow} - ${data.fiftyTwoWeekHigh}`);
+  }
+  
+  // Volume
+  if (data.volume) parts.push(`Volume: ${(data.volume / 1000000).toFixed(2)}M`);
+  
+  // Fundamental Metrics
+  if (data.peRatio) parts.push(`P/E Ratio: ${data.peRatio.toFixed(2)}`);
+  if (data.dividendYield) parts.push(`Dividend Yield: ${(data.dividendYield * 100).toFixed(2)}%`);
+  if (data.eps) parts.push(`EPS: ${data.eps.toFixed(2)}`);
+  if (data.marketCap) parts.push(`Market Cap: ${data.marketCap.toFixed(0)} (millions)`);
+  
+  // Company Info
+  if (data.longName) parts.push(`Company: ${data.longName}`);
+  if (data.exchange) parts.push(`Exchange: ${data.exchange}`);
+  if (data.industry) parts.push(`Industry: ${data.industry}`);
+  
+  // Source
+  if (data.source) parts.push(`Data Source: ${data.source}`);
+  
+  return parts.join('\n');
+}
+
+/**
  * Main exported function – called by the route handler.
  * Includes a simple cache to avoid duplicate API calls for the same company.
  */
@@ -229,10 +277,10 @@ export async function runResearch(company) {
   }
 
   const ticker = await resolveTicker(company)
-  const financials = await fetchFinancials(ticker)
+  const financials = await fetchComprehensiveFinancials(ticker)
   const news = await fetchNews(company)
 
-  const financialsText = JSON.stringify(financials, null, 2)
+  const financialsText = formatFinancials(financials)
   const newsText = news
     .map((item, index) => `${index + 1}. ${item.source}: ${item.title} - ${item.snippet}`)
     .join('\n')

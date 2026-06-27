@@ -1,0 +1,59 @@
+{
+  "decision": "PASS",
+  "confidence": 35,
+  "summary": "The available information is limited to recruitment and employee value proposition news, lacking crucial financial data or market-moving developments to support an investment decision.",
+  "evidence": [
+    {
+      "source": "donegaldaily",
+      "title": "Join Tata Consultancy Services, Letterkenny. Global opportunities. Local roots.",
+      "snippet": "At Tata Consultancy Services (TCS), you don’t have to choose between building a global career and staying connected to home. As a global organisation with a str...",
+      "url": "https://www.donegaldaily.com/business/join-tata-consultancy-services-letterkenny-global-opportunities-local-roots-639482"
+    },
+    {
+      "source": "politicsweb",
+      "title": "Why you are better off in Joburg than London - TCS",
+      "snippet": "In the UK capital, a young professional will have to spend around 50% of their gross income just on rent",
+      "url": "https://www.politicsweb.co.za/news/why-you-are-better-off-in-joburg-than-london-tcs"
+    }
+  ],
+  "reasoning": [
+    "No financial data is available to assess the company's performance, valuation, or financial health, which are critical for an investment decision.",
+    "The provided news articles focus on talent acquisition, global opportunities, and employee cost of living comparisons, which are not direct indicators of investment potential without broader financial and market context.",
+    "There is no information regarding new products, significant market share changes, competitive advantages, or other strategic developments that would typically drive an investment recommendation."
+  ],
+  "keyEvidence": [
+    "Financials are null, indicating a complete absence of quantitative financial metrics.",
+    "News article 1 highlights recruitment efforts in Letterkenny, emphasizing global opportunities and local roots.",
+    "News article 2 discusses cost of living differences for professionals, implying a focus on employee value proposition and potentially optimizing talent location."
+  ],
+  "transcript": {
+    "prompt": "You are an AI investment research assistant.\n\nCompany: {company}\nTicker: {ticker}\nFinancials: {financials}\nRecent news: {news}\n\nUsing the information above, choose one decision: INVEST or PASS.\nProvide a concise, factual answer. Produce a JSON object with these keys only:\n- decision\n- confidence (integer 0-100)\n- summary\n- reasoning\n- key_evidence\n\nExample output:\n{\n  \"decision\": \"INVEST\",\n  \"confidence\": 78,\n  \"summary\": \"...\",\n  \"reasoning\": [\"...\", \"...\"],\n  \"key_evidence\": [\"...\", \"...\"]\n}\n\nDo not add extra text outside valid JSON.\n",
+    "input": {
+      "company": "TCS",
+      "ticker": "TCS",
+      "financials": "{\n  \"ticker\": \"TCS\",\n  \"currentPrice\": null,\n  \"highPrice\": null,\n  \"lowPrice\": null,\n  \"openPrice\": null,\n  \"previousClose\": null,\n  \"source\": \"Fallback\",\n  \"note\": \"Add FINNHUB_API_KEY to .env for real financial data\"\n}",
+      "news": "1. donegaldaily: Join Tata Consultancy Services, Letterkenny. Global opportunities. Local roots. - At Tata Consultancy Services (TCS), you don’t have to choose between building a global career and staying connected to home. As a global organisation with a str...\n2. politicsweb: Why you are better off in Joburg than London - TCS - In the UK capital, a young professional will have to spend around 50% of their gross income just on rent"
+    },
+    "response": "```json\n{\n  \"decision\": \"PASS\",\n  \"confidence\": 35,\n  \"summary\": \"The available information is limited to recruitment and employee value proposition news, lacking crucial financial data or market-moving developments to support an investment decision.\",\n  \"reasoning\": [\n    \"No financial data is available to assess the company's performance, valuation, or financial health, which are critical for an investment decision.\",\n    \"The provided news articles focus on talent acquisition, global opportunities, and employee cost of living comparisons, which are not direct indicators of investment potential without broader financial and market context.\",\n    \"There is no information regarding new products, significant market share changes, competitive advantages, or other strategic developments that would typically drive an investment recommendation.\"\n  ],\n  \"key_evidence\": [\n    \"Financials are null, indicating a complete absence of quantitative financial metrics.\",\n    \"News article 1 highlights recruitment efforts in Letterkenny, emphasizing global opportunities and local roots.\",\n    \"News article 2 discusses cost of living differences for professionals, implying a focus on employee value proposition and potentially optimizing talent location.\"\n  ]\n}\n```",
+    "parsed": {
+      "decision": "PASS",
+      "confidence": 35,
+      "summary": "The available information is limited to recruitment and employee value proposition news, lacking crucial financial data or market-moving developments to support an investment decision.",
+      "reasoning": [
+        "No financial data is available to assess the company's performance, valuation, or financial health, which are critical for an investment decision.",
+        "The provided news articles focus on talent acquisition, global opportunities, and employee cost of living comparisons, which are not direct indicators of investment potential without broader financial and market context.",
+        "There is no information regarding new products, significant market share changes, competitive advantages, or other strategic developments that would typically drive an investment recommendation."
+      ],
+      "key_evidence": [
+        "Financials are null, indicating a complete absence of quantitative financial metrics.",
+        "News article 1 highlights recruitment efforts in Letterkenny, emphasizing global opportunities and local roots.",
+        "News article 2 discusses cost of living differences for professionals, implying a focus on employee value proposition and potentially optimizing talent location."
+      ]
+    },
+    "providerLog": {
+      "provider": "Gemini",
+      "model": "gemini-2.5-flash"
+    },
+    "error": null
+  }
+}

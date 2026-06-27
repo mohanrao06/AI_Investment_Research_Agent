@@ -1,0 +1,51 @@
+{
+  "decision": "PASS",
+  "confidence": 0,
+  "summary": "No real financial data or recent news is available to make an informed investment decision for .Infosys Ltd.",
+  "evidence": [
+    {
+      "source": "MockNews",
+      "title": "Recent mention of .Infosys Ltd",
+      "snippet": "Example snippet. Add a valid news API key to .env for real news.",
+      "url": null
+    }
+  ],
+  "reasoning": [
+    "The provided financial data is a fallback, indicating no actual financial metrics (e.g., current price, historical prices) are available.",
+    "The recent news is a mock snippet, meaning there is no real-time or relevant news to assess company developments or market sentiment.",
+    "Without fundamental financial data and current news, it is impossible to conduct any meaningful analysis to support an INVEST or PASS decision responsibly."
+  ],
+  "keyEvidence": [
+    "Financials: {\"source\": \"Fallback\", \"note\": \"Add FINNHUB_API_KEY to .env for real financial data\"}",
+    "Recent news: \"MockNews: Recent mention of .Infosys Ltd - Example snippet. Add a valid news API key to .env for real news.\""
+  ],
+  "transcript": {
+    "prompt": "You are an AI investment research assistant.\n\nCompany: {company}\nTicker: {ticker}\nFinancials: {financials}\nRecent news: {news}\n\nUsing the information above, choose one decision: INVEST or PASS.\nProvide a concise, factual answer. Produce a JSON object with these keys only:\n- decision\n- confidence (integer 0-100)\n- summary\n- reasoning\n- key_evidence\n\nExample output:\n{\n  \"decision\": \"INVEST\",\n  \"confidence\": 78,\n  \"summary\": \"...\",\n  \"reasoning\": [\"...\", \"...\"],\n  \"key_evidence\": [\"...\", \"...\"]\n}\n\nDo not add extra text outside valid JSON.\n",
+    "input": {
+      "company": ".Infosys Ltd",
+      "ticker": ".INFOSYSLTD",
+      "financials": "{\n  \"ticker\": \".INFOSYSLTD\",\n  \"currentPrice\": null,\n  \"highPrice\": null,\n  \"lowPrice\": null,\n  \"openPrice\": null,\n  \"previousClose\": null,\n  \"source\": \"Fallback\",\n  \"note\": \"Add FINNHUB_API_KEY to .env for real financial data\"\n}",
+      "news": "1. MockNews: Recent mention of .Infosys Ltd - Example snippet. Add a valid news API key to .env for real news."
+    },
+    "response": "```json\n{\n  \"decision\": \"PASS\",\n  \"confidence\": 0,\n  \"summary\": \"No real financial data or recent news is available to make an informed investment decision for .Infosys Ltd.\",\n  \"reasoning\": [\n    \"The provided financial data is a fallback, indicating no actual financial metrics (e.g., current price, historical prices) are available.\",\n    \"The recent news is a mock snippet, meaning there is no real-time or relevant news to assess company developments or market sentiment.\",\n    \"Without fundamental financial data and current news, it is impossible to conduct any meaningful analysis to support an INVEST or PASS decision responsibly.\"\n  ],\n  \"key_evidence\": [\n    \"Financials: {\\\"source\\\": \\\"Fallback\\\", \\\"note\\\": \\\"Add FINNHUB_API_KEY to .env for real financial data\\\"}\",\n    \"Recent news: \\\"MockNews: Recent mention of .Infosys Ltd - Example snippet. Add a valid news API key to .env for real news.\\\"\"\n  ]\n}\n```",
+    "parsed": {
+      "decision": "PASS",
+      "confidence": 0,
+      "summary": "No real financial data or recent news is available to make an informed investment decision for .Infosys Ltd.",
+      "reasoning": [
+        "The provided financial data is a fallback, indicating no actual financial metrics (e.g., current price, historical prices) are available.",
+        "The recent news is a mock snippet, meaning there is no real-time or relevant news to assess company developments or market sentiment.",
+        "Without fundamental financial data and current news, it is impossible to conduct any meaningful analysis to support an INVEST or PASS decision responsibly."
+      ],
+      "key_evidence": [
+        "Financials: {\"source\": \"Fallback\", \"note\": \"Add FINNHUB_API_KEY to .env for real financial data\"}",
+        "Recent news: \"MockNews: Recent mention of .Infosys Ltd - Example snippet. Add a valid news API key to .env for real news.\""
+      ]
+    },
+    "providerLog": {
+      "provider": "Gemini",
+      "model": "gemini-2.5-flash"
+    },
+    "error": null
+  }
+}

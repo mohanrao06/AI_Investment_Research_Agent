@@ -1,0 +1,51 @@
+{
+  "decision": "PASS",
+  "confidence": 100,
+  "summary": "Insufficient data to make an informed investment decision for Infosys Ltd.",
+  "evidence": [
+    {
+      "source": "MockNews",
+      "title": "Recent mention of Infosys Ltd",
+      "snippet": "Example snippet. Add a valid news API key to .env for real news.",
+      "url": null
+    }
+  ],
+  "reasoning": [
+    "No real financial data (current price, high/low, open, previous close) is available.",
+    "No real recent news is available; only a mock snippet was provided.",
+    "Without fundamental financial metrics, market performance data, or relevant news, a proper investment analysis cannot be conducted."
+  ],
+  "keyEvidence": [
+    "Financials: All price fields are null, indicating no real financial data.",
+    "Recent news: Only 'MockNews: Recent mention of Infosys Ltd - Example snippet' is available, indicating no real news."
+  ],
+  "transcript": {
+    "prompt": "You are an AI investment research assistant.\n\nCompany: {company}\nTicker: {ticker}\nFinancials: {financials}\nRecent news: {news}\n\nUsing the information above, choose one decision: INVEST or PASS.\nProvide a concise, factual answer. Produce a JSON object with these keys only:\n- decision\n- confidence (integer 0-100)\n- summary\n- reasoning\n- key_evidence\n\nExample output:\n{\n  \"decision\": \"INVEST\",\n  \"confidence\": 78,\n  \"summary\": \"...\",\n  \"reasoning\": [\"...\", \"...\"],\n  \"key_evidence\": [\"...\", \"...\"]\n}\n\nDo not add extra text outside valid JSON.\n",
+    "input": {
+      "company": "Infosys Ltd",
+      "ticker": "INFOSYSLTD",
+      "financials": "{\n  \"ticker\": \"INFOSYSLTD\",\n  \"currentPrice\": null,\n  \"highPrice\": null,\n  \"lowPrice\": null,\n  \"openPrice\": null,\n  \"previousClose\": null,\n  \"source\": \"Fallback\",\n  \"note\": \"Add FINNHUB_API_KEY to .env for real financial data\"\n}",
+      "news": "1. MockNews: Recent mention of Infosys Ltd - Example snippet. Add a valid news API key to .env for real news."
+    },
+    "response": "```json\n{\n  \"decision\": \"PASS\",\n  \"confidence\": 100,\n  \"summary\": \"Insufficient data to make an informed investment decision for Infosys Ltd.\",\n  \"reasoning\": [\n    \"No real financial data (current price, high/low, open, previous close) is available.\",\n    \"No real recent news is available; only a mock snippet was provided.\",\n    \"Without fundamental financial metrics, market performance data, or relevant news, a proper investment analysis cannot be conducted.\"\n  ],\n  \"key_evidence\": [\n    \"Financials: All price fields are null, indicating no real financial data.\",\n    \"Recent news: Only 'MockNews: Recent mention of Infosys Ltd - Example snippet' is available, indicating no real news.\"\n  ]\n}\n```",
+    "parsed": {
+      "decision": "PASS",
+      "confidence": 100,
+      "summary": "Insufficient data to make an informed investment decision for Infosys Ltd.",
+      "reasoning": [
+        "No real financial data (current price, high/low, open, previous close) is available.",
+        "No real recent news is available; only a mock snippet was provided.",
+        "Without fundamental financial metrics, market performance data, or relevant news, a proper investment analysis cannot be conducted."
+      ],
+      "key_evidence": [
+        "Financials: All price fields are null, indicating no real financial data.",
+        "Recent news: Only 'MockNews: Recent mention of Infosys Ltd - Example snippet' is available, indicating no real news."
+      ]
+    },
+    "providerLog": {
+      "provider": "Gemini",
+      "model": "gemini-2.5-flash"
+    },
+    "error": null
+  }
+}

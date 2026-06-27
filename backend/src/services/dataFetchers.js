@@ -10,6 +10,21 @@ const OPENAI_MODEL = process.env.OPENAI_MODEL || 'gpt-3.5-turbo';
  */
 export async function resolveTicker(company) {
   if (!company) return '';
+  
+  // Special case mappings for Indian companies
+  const specialMappings = {
+    'HDFC': 'HDFCBANK',
+    'HDFC Bank': 'HDFCBANK',
+    'HDFCBANK': 'HDFCBANK',
+  };
+  
+  const normalized = company.trim();
+  if (specialMappings[normalized]) {
+    const ticker = specialMappings[normalized];
+    console.log(`[resolveTicker] Input "${company}" → special mapping "${ticker}"`);
+    return ticker;
+  }
+  
   // Already looks like a ticker? (allow letters, numbers, dot)
   if (/^[A-Z0-9\.]+$/i.test(company)) {
     const ticker = company.toUpperCase();
@@ -30,6 +45,71 @@ export async function resolveTicker(company) {
   const ticker = firstWord || company.toUpperCase().replace(/\s+/g, ''); // fallback
   console.log(`[resolveTicker] Input "${company}" → ticker "${ticker}"`);
   return ticker;
+}
+
+/**
+ * Fetch fundamental metrics (P/E, P/B, ROE, dividend yield, etc.) for a ticker.
+ * Uses Finnhub Company Profile and Quote endpoints.
+ */
+export async function fetchFundamentals(ticker) {
+  const finnhubKey = process.env.FINNHUB_API_KEY || process.env.DATA_API_KEY;
+  if (!finnhubKey || !ticker) {
+    console.log('[fetchFundamentals] No API key or ticker – returning empty fundamentals');
+    return {};
+  }
+
+  const suffixes = ['', '.NS', '.BO'];
+  
+  for (const suffix of suffixes) {
+    const symbol = `${ticker}${suffix}`;
+    
+    // Try to get company profile for fundamental metrics
+    const profileUrl = `https://finnhub.io/api/v1/stock/profile2?symbol=${encodeURIComponent(symbol)}&token=${finnhubKey}`;
+    console.log(`[fetchFundamentals] Trying Finnhub profile: ${profileUrl}`);
+    
+    try {
+      const res = await fetch(profileUrl);
+      if (!res.ok) {
+        console.warn(`[fetchFundamentals] Profile HTTP ${res.status} for ${symbol}`);
+        continue;
+      }
+      const data = await res.json();
+      console.log(`[fetchFundamentals] Profile data for ${symbol}:`, JSON.stringify(data, null, 2));
+      
+      if (data && Object.keys(data).length > 0) {
+        const fundamentals = {
+          marketCap: data.marketCapitalization ?? null,
+          peRatio: data.pe ?? null,
+          dividendYield: data.dividendYield ?? null,
+          eps: data.eps ?? null,
+          industry: data.finnhubIndustry ?? null,
+          weburl: data.weburl ?? null,
+          country: data.country ?? null,
+        };
+        console.log(`[fetchFundamentals] Success with profile data for ${symbol}`);
+        return fundamentals;
+      }
+    } catch (error) {
+      console.warn(`[fetchFundamentals] Profile request error for ${symbol}:`, error.message);
+    }
+  }
+
+  console.warn('[fetchFundamentals] All attempts failed – returning empty fundamentals');
+  return {};
+}
+
+/**
+ * Fetch comprehensive financial data including price and fundamentals.
+ * Combines Yahoo Finance price data with Finnhub fundamentals.
+ */
+export async function fetchComprehensiveFinancials(ticker) {
+  const priceData = await fetchFinancials(ticker);
+  const fundamentals = await fetchFundamentals(ticker);
+  
+  return {
+    ...priceData,
+    ...fundamentals,
+  };
 }
 
 /**
@@ -104,36 +184,61 @@ export async function fetchFinancials(ticker) {
   }
 
   // ----- Fallback: Yahoo Finance (no API key) -----
-  const yahooUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(ticker)}?interval=1d&range=1d`;
-  console.log(`[fetchFinancials] Trying Yahoo Finance: ${yahooUrl}`);
-  try {
-    const res = await fetch(yahooUrl);
-    if (!res.ok) {
-      console.warn(`[fetchFinancials] Yahoo HTTP ${res.status}`);
-      throw new Error('Yahoo request failed');
-    }
-    const data = await res.json();
-    console.log(`[fetchFinancials] Yahoo raw response:`, JSON.stringify(data, null, 2));
+  // Try Yahoo Finance with different suffixes for Indian stocks
+  const yahooSuffixes = ['', '.NS', '.BO'];
+  for (const suffix of yahooSuffixes) {
+    const yahooSymbol = `${ticker}${suffix}`;
+    const yahooUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(yahooSymbol)}?interval=1d&range=1d`;
+    console.log(`[fetchFinancials] Trying Yahoo Finance: ${yahooUrl}`);
+    try {
+      const res = await fetch(yahooUrl);
+      if (!res.ok) {
+        console.warn(`[fetchFinancials] Yahoo HTTP ${res.status} for ${yahooSymbol}`);
+        continue;
+      }
+      const data = await res.json();
+      console.log(`[fetchFinancials] Yahoo raw response for ${yahooSymbol}:`, JSON.stringify(data, null, 2));
 
-    const result = data.chart?.result?.[0];
-    if (!result) {
-      throw new Error('Unexpected Yahoo response structure');
+      const result = data.chart?.result?.[0];
+      if (!result) {
+        console.warn(`[fetchFinancials] Invalid Yahoo response structure for ${yahooSymbol}`);
+        continue;
+      }
+      const meta = result.meta;
+      const quote = result.indicators?.quote?.[0];
+      
+      // Check if we have valid data
+      const currentPrice = meta.regularMarketPrice ?? null;
+      if (currentPrice && currentPrice > 0) {
+        const yahooResult = {
+          ticker: yahooSymbol,
+          currentPrice: currentPrice,
+          highPrice: meta.regularMarketDayHigh ?? null,
+          lowPrice: meta.regularMarketDayLow ?? null,
+          openPrice: quote?.open?.[0] ?? meta.regularMarketOpen ?? null,
+          previousClose: meta.chartPreviousClose ?? null,
+          fiftyTwoWeekHigh: meta.fiftyTwoWeekHigh ?? null,
+          fiftyTwoWeekLow: meta.fiftyTwoWeekLow ?? null,
+          volume: meta.regularMarketVolume ?? null,
+          currency: meta.currency ?? 'USD',
+          longName: meta.longName ?? null,
+          exchange: meta.fullExchangeName ?? null,
+          source: 'YahooFinance',
+        };
+        console.log(`[fetchFinancials] Success with Yahoo Finance (${yahooSymbol})`);
+        return yahooResult;
+      } else {
+        console.warn(`[fetchFinancials] Yahoo returned invalid/zero price for ${yahooSymbol}`);
+        continue;
+      }
+    } catch (error) {
+      console.warn(`[fetchFinancials] Yahoo Finance request error for ${yahooSymbol}:`, error.message);
+      continue;
     }
-    const meta = result.meta;
-    const yahooResult = {
-      ticker: ticker, // Yahoo returns the symbol we asked for
-      currentPrice: meta.regularMarketPrice ?? null,
-      highPrice: meta.regularMarketDayHigh ?? null,
-      lowPrice: meta.regularMarketDayLow ?? null,
-      openPrice: meta.regularMarketOpen ?? null,
-      previousClose: meta.regularMarketPreviousClose ?? null,
-      source: 'YahooFinance',
-    };
-    console.log(`[fetchFinancials] Success with Yahoo Finance`);
-    return yahooResult;
-  } catch (error) {
-    console.warn('[fetchFinancials] Yahoo Finance fallback failed:', error.message);
   }
+
+  console.warn('[fetchFinancials] All Yahoo Finance attempts failed');
+  
 
   // ----- Final fallback -----
   console.log('[fetchFinancials] All sources failed – returning fallback object');
