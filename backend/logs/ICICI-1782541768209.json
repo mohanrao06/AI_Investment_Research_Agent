@@ -1,0 +1,65 @@
+{
+  "decision": "PASS",
+  "confidence": 40,
+  "summary": "A decision to invest cannot be made due to the complete absence of ICICI Bank's financial data, including current price, historical performance, and valuation metrics, despite positive outlooks for the non-life insurance and housing finance sectors.",
+  "evidence": [
+    {
+      "source": "thehindubusinessline",
+      "title": "The Latest Home Loan Interest Rates: Jun 26, 2026",
+      "snippet": "ONLY AVAILABLE IN PAID PLANS",
+      "url": "https://www.thehindubusinessline.com/money-and-banking/the-latest-home-loan-interest-rates-jun-26-2026/article64808517.ece"
+    },
+    {
+      "source": "openpr",
+      "title": "India Non-Life Insurance Market to Reach US$ 22,400 Mn by 2029",
+      "snippet": "India Non-Life Insurance Market was valued at US$ 13, 7889 Mn. in 2021 and is expected to grow at US$ 22,400 Mn. in 2029. India Non-Life Insurance Market size is expected to grow at a CAGR of 7.18 % through",
+      "url": "https://www.openpr.com/news/4561722/india-non-life-insurance-market-to-reach-us-22-400-mn-by-2029"
+    },
+    {
+      "source": "financialexpress",
+      "title": "Aadhar, Aptus, Home First: Kotak names 4 housing finance stocks with 12% to 48% upside potential",
+      "snippet": "Kotak expects affordable housing finance companies to regain growth momentum in FY27, with Aadhar, Aptus, Home First and India Shelter among its top stock picks offering upside potential of up to 48%.",
+      "url": "https://www.financialexpress.com/market/aadhar-aptus-home-first-kotak-names-4-housing-finance-stocks-with-12-to-48-upside-potential-4277033/"
+    }
+  ],
+  "reasoning": [
+    "No financial data (current price, historicals, valuation) is provided, making a fundamental investment assessment impossible.",
+    "While the non-life insurance market shows strong growth potential (CAGR of 7.18% to US$ 22,400 Mn by 2029), benefiting ICICI Bank's subsidiary, this alone is insufficient for an investment decision without company-specific financials.",
+    "The housing finance sector is also expected to regain growth momentum in FY27, which is positive for ICICI Bank's lending business, but this is a general sector trend without specific company financial context."
+  ],
+  "keyEvidence": [
+    "Financials: { 'ticker': 'ICICI', 'currentPrice': 0, 'highPrice': 0, 'lowPrice': 0, 'openPrice': 0, 'previousClose': 0, 'source': 'Finnhub' }",
+    "India Non-Life Insurance Market to Reach US$ 22,400 Mn by 2029 - India Non-Life Insurance Market was valued at US$ 13, 7889 Mn. in 2021 and is expected to grow at US$ 22,400 Mn. in 2029. India Non-Life Insurance Market size is expected to grow at a CAGR of 7.18 % through",
+    "Kotak expects affordable housing finance companies to regain growth momentum in FY27"
+  ],
+  "transcript": {
+    "prompt": "You are an AI investment research assistant.\n\nCompany: {company}\nTicker: {ticker}\nFinancials: {financials}\nRecent news: {news}\n\nUsing the information above, choose one decision: INVEST or PASS.\nProvide a concise, factual answer. Produce a JSON object with these keys only:\n- decision\n- confidence (integer 0-100)\n- summary\n- reasoning\n- key_evidence\n\nExample output:\n{\n  \"decision\": \"INVEST\",\n  \"confidence\": 78,\n  \"summary\": \"...\",\n  \"reasoning\": [\"...\", \"...\"],\n  \"key_evidence\": [\"...\", \"...\"]\n}\n\nDo not add extra text outside valid JSON.\n",
+    "input": {
+      "company": "ICICI Bank Ltd",
+      "ticker": "ICICI",
+      "financials": "{\n  \"ticker\": \"ICICI\",\n  \"currentPrice\": 0,\n  \"highPrice\": 0,\n  \"lowPrice\": 0,\n  \"openPrice\": 0,\n  \"previousClose\": 0,\n  \"source\": \"Finnhub\"\n}",
+      "news": "1. thehindubusinessline: The Latest Home Loan Interest Rates: Jun 26, 2026 - ONLY AVAILABLE IN PAID PLANS\n2. openpr: India Non-Life Insurance Market to Reach US$ 22,400 Mn by 2029 - India Non-Life Insurance Market was valued at US$ 13, 7889 Mn. in 2021 and is expected to grow at US$ 22,400 Mn. in 2029. India Non-Life Insurance Market size is expected to grow at a CAGR of 7.18 % through\n3. financialexpress: Aadhar, Aptus, Home First: Kotak names 4 housing finance stocks with 12% to 48% upside potential - Kotak expects affordable housing finance companies to regain growth momentum in FY27, with Aadhar, Aptus, Home First and India Shelter among its top stock picks offering upside potential of up to 48%."
+    },
+    "response": "```json\n{\n  \"decision\": \"PASS\",\n  \"confidence\": 40,\n  \"summary\": \"A decision to invest cannot be made due to the complete absence of ICICI Bank's financial data, including current price, historical performance, and valuation metrics, despite positive outlooks for the non-life insurance and housing finance sectors.\",\n  \"reasoning\": [\n    \"No financial data (current price, historicals, valuation) is provided, making a fundamental investment assessment impossible.\",\n    \"While the non-life insurance market shows strong growth potential (CAGR of 7.18% to US$ 22,400 Mn by 2029), benefiting ICICI Bank's subsidiary, this alone is insufficient for an investment decision without company-specific financials.\",\n    \"The housing finance sector is also expected to regain growth momentum in FY27, which is positive for ICICI Bank's lending business, but this is a general sector trend without specific company financial context.\"\n  ],\n  \"key_evidence\": [\n    \"Financials: { 'ticker': 'ICICI', 'currentPrice': 0, 'highPrice': 0, 'lowPrice': 0, 'openPrice': 0, 'previousClose': 0, 'source': 'Finnhub' }\",\n    \"India Non-Life Insurance Market to Reach US$ 22,400 Mn by 2029 - India Non-Life Insurance Market was valued at US$ 13, 7889 Mn. in 2021 and is expected to grow at US$ 22,400 Mn. in 2029. India Non-Life Insurance Market size is expected to grow at a CAGR of 7.18 % through\",\n    \"Kotak expects affordable housing finance companies to regain growth momentum in FY27\"\n  ]\n}\n```",
+    "parsed": {
+      "decision": "PASS",
+      "confidence": 40,
+      "summary": "A decision to invest cannot be made due to the complete absence of ICICI Bank's financial data, including current price, historical performance, and valuation metrics, despite positive outlooks for the non-life insurance and housing finance sectors.",
+      "reasoning": [
+        "No financial data (current price, historicals, valuation) is provided, making a fundamental investment assessment impossible.",
+        "While the non-life insurance market shows strong growth potential (CAGR of 7.18% to US$ 22,400 Mn by 2029), benefiting ICICI Bank's subsidiary, this alone is insufficient for an investment decision without company-specific financials.",
+        "The housing finance sector is also expected to regain growth momentum in FY27, which is positive for ICICI Bank's lending business, but this is a general sector trend without specific company financial context."
+      ],
+      "key_evidence": [
+        "Financials: { 'ticker': 'ICICI', 'currentPrice': 0, 'highPrice': 0, 'lowPrice': 0, 'openPrice': 0, 'previousClose': 0, 'source': 'Finnhub' }",
+        "India Non-Life Insurance Market to Reach US$ 22,400 Mn by 2029 - India Non-Life Insurance Market was valued at US$ 13, 7889 Mn. in 2021 and is expected to grow at US$ 22,400 Mn. in 2029. India Non-Life Insurance Market size is expected to grow at a CAGR of 7.18 % through",
+        "Kotak expects affordable housing finance companies to regain growth momentum in FY27"
+      ]
+    },
+    "providerLog": {
+      "provider": "Gemini",
+      "model": "gemini-2.5-flash"
+    },
+    "error": null
+  }
+}

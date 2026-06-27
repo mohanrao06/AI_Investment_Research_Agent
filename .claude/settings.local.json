@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(tasklist)",
+      "Bash(findstr 28276)",
+      "Bash(taskkill *)",
+      "Bash(node src/index.js)",
+      "Bash(npx eslint *)",
+      "Bash(node -c src/index.js src/routes/research.js src/services/llmOrchestrator.js src/services/dataFetchers.js)",
+      "Bash(curl *)",
+      "Bash(npm run *)"
+    ]
+  }
+}

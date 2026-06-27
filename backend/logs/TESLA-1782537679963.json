@@ -1,0 +1,56 @@
+{
+  "company": "tesla",
+  "ticker": "TESLA",
+  "financials": {
+    "ticker": "TESLA",
+    "currentPrice": 0,
+    "highPrice": 0,
+    "lowPrice": 0,
+    "openPrice": 0,
+    "previousClose": 0,
+    "source": "Finnhub"
+  },
+  "news": [
+    {
+      "source": "dailygazette",
+      "title": "Auto review: Road trippin' in the Infiniti QX80 Sport mega-ute",
+      "snippet": "INDIANAPOLIS — It's construction season in the Midwest, and there’s no better way to navigate it than in a mega-ute. Not in a sedan (WHUMP! Those road seams are harsh). Not in a compact SUV (YIKES! Those semis are huge!)....",
+      "url": "https://www.dailygazette.com/tribune/auto-review-road-trippin-in-the-infiniti-qx80-sport-mega-ute/article_b92ec4c5-71bd-5265-a2e7-2b7348f3ed47.html"
+    },
+    {
+      "source": "paloaltoonline",
+      "title": "Palo Alto Weekly honored with 35 awards in statewide journalism contest",
+      "snippet": "The Palo Alto Weekly received 35 awards this week in the annual California Journalism Awards contest, including top honors in the categories of breaking news, transportation reporting, faith reporting and page design.",
+      "url": "https://www.paloaltoonline.com/palo-alto-news/2026/06/26/palo-alto-weekly-honored-with-35-awards-in-statewide-journalism-contest/"
+    },
+    {
+      "source": "businessinsider_us",
+      "title": "Elon Musk agrees with Tim Cook: The memory shortage is unprecedented",
+      "snippet": "Elon Musk said soaring memory costs are the \"biggest price jump in anything I've ever seen\" and that the solution is \"MUCH higher production.\"",
+      "url": "https://www.businessinsider.com/elon-musk-tim-cook-memory-shortage-chips-demand-rising-prices-2026-6"
+    }
+  ],
+  "decision": "PASS",
+  "confidence": 50,
+  "summary": "LLM request failed. [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [404 Not Found] models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.",
+  "reasoning": [
+    "See raw model response for details."
+  ],
+  "keyEvidence": [],
+  "transcript": {
+    "prompt": "You are an AI investment research assistant.\n\nCompany: {company}\nTicker: {ticker}\nFinancials: {financials}\nRecent news: {news}\n\nUsing the information above, choose one decision: INVEST or PASS.\nProvide a concise, factual answer. Produce a JSON object with these keys only:\n- decision\n- confidence (integer 0-100)\n- summary\n- reasoning\n- key_evidence\n\nExample output:\n{\n  \"decision\": \"INVEST\",\n  \"confidence\": 78,\n  \"summary\": \"...\",\n  \"reasoning\": [\"...\", \"...\"],\n  \"key_evidence\": [\"...\", \"...\"]\n}\n\nDo not add extra text outside valid JSON.\n",
+    "input": {
+      "company": "tesla",
+      "ticker": "TESLA",
+      "financials": "{\n  \"ticker\": \"TESLA\",\n  \"currentPrice\": 0,\n  \"highPrice\": 0,\n  \"lowPrice\": 0,\n  \"openPrice\": 0,\n  \"previousClose\": 0,\n  \"source\": \"Finnhub\"\n}",
+      "news": "1. dailygazette: Auto review: Road trippin' in the Infiniti QX80 Sport mega-ute - INDIANAPOLIS — It's construction season in the Midwest, and there’s no better way to navigate it than in a mega-ute. Not in a sedan (WHUMP! Those road seams are harsh). Not in a compact SUV (YIKES! Those semis are huge!)....\n2. paloaltoonline: Palo Alto Weekly honored with 35 awards in statewide journalism contest - The Palo Alto Weekly received 35 awards this week in the annual California Journalism Awards contest, including top honors in the categories of breaking news, transportation reporting, faith reporting and page design.\n3. businessinsider_us: Elon Musk agrees with Tim Cook: The memory shortage is unprecedented - Elon Musk said soaring memory costs are the \"biggest price jump in anything I've ever seen\" and that the solution is \"MUCH higher production.\""
+    },
+    "response": "",
+    "parsed": null,
+    "providerLog": {
+      "provider": null,
+      "fallbackFrom": null
+    },
+    "error": "[GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [404 Not Found] models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
+  }
+}

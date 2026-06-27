@@ -1,0 +1,71 @@
+{
+  "decision": "INVEST",
+  "confidence": 85,
+  "summary": "SBI Holdings has made a significant strategic move by acquiring Bitbank for $289 million, consolidating its position as Japan's largest cryptocurrency exchange with $6.8 billion in customer assets. This expansion into the digital asset market positions the company for future growth.",
+  "evidence": [
+    {
+      "source": "techbullion",
+      "title": "Crypto News Today: SBI Acquires Bitbank for $289M as Pepeto Tops $10.3M",
+      "snippet": "Japan’s largest financial group just built the biggest crypto exchange in the country. SBI Holdings closed a $289 million deal for Bitbank on June 25, merging three licensed exchanges into one operator holding $6.8 billion in customer assets. The crypto news today is that institutional capital builds infrastructure for the next wave even... Read the full article on TechBullion.",
+      "url": "https://techbullion.com/crypto-news-today-sbi-acquires-bitbank-for-289m-as-pepeto-tops-10-3m/"
+    },
+    {
+      "source": "siasat",
+      "title": "Telangana offers alternate land to SBI to resolve Raidurg dispute",
+      "snippet": "Hyderabad: The Telangana government has offered alternative land parcels to the State Bank of India (SBI) in an effort to resolve the dispute over a five-acre land parcel in Raidurg. According to officials, SBI representatives recently inspected the proposed sites and are expected to respond after consulting the bank’s headquarters. Telangana proposes three alternative land ... Get the latest updates in Hyderabad City News , Technology , Entertainment , Sports , Politics and Top Stories on WhatsApp & Telegram by subscribing to our channels. You can also download our app for Android and iOS .",
+      "url": "https://www.siasat.com/telangana-offers-alternate-land-to-sbi-to-resolve-raidurg-dispute-3497016/"
+    },
+    {
+      "source": "yahoo",
+      "title": "Japan’s SBI Holdings To Acquire Bitbank For $289 Million",
+      "snippet": "Japanese financial services firm SBI Holdings (OTC: $SBHGF) has agreed to buy cryptocurrency exchange Bitbank for $...",
+      "url": "https://finance.yahoo.com/markets/crypto/articles/japan-sbi-holdings-acquire-bitbank-172300794.html"
+    },
+    {
+      "source": "thenewsmill",
+      "title": "Eight remanded in Rs 79.85 lakh Ram Mandir donation embezzlement case",
+      "snippet": "Eight individuals, including SBI employees, remanded in a Rs 79.85 lakh embezzlement case linked to Ram Mandir donations, sparking political controversy.",
+      "url": "https://thenewsmill.com/2026/06/eight-remanded-in-rs-79-85-lakh-ram-mandir-donation-embezzlement-case/"
+    }
+  ],
+  "reasoning": [
+    "The acquisition of Bitbank establishes SBI Holdings as the leading cryptocurrency exchange in Japan, demonstrating a strong strategic focus on growth in the digital asset sector.",
+    "This move diversifies SBI's business into a high-growth market, potentially enhancing future revenue streams and market share.",
+    "News regarding land disputes and embezzlement cases pertains to State Bank of India (India), which is a separate entity from SBI Holdings (Japan), and therefore does not impact the investment decision for the latter."
+  ],
+  "keyEvidence": [
+    "SBI Acquires Bitbank for $289M... merging three licensed exchanges into one operator holding $6.8 billion in customer assets.",
+    "Japan’s largest financial group just built the biggest crypto exchange in the country.",
+    "Japan’s SBI Holdings To Acquire Bitbank For $289 Million."
+  ],
+  "transcript": {
+    "prompt": "You are an AI investment research assistant.\n\nCompany: {company}\nTicker: {ticker}\nFinancials: {financials}\nRecent news: {news}\n\nUsing the information above, choose one decision: INVEST or PASS.\nProvide a concise, factual answer. Produce a JSON object with these keys only:\n- decision\n- confidence (integer 0-100)\n- summary\n- reasoning\n- key_evidence\n\nExample output:\n{\n  \"decision\": \"INVEST\",\n  \"confidence\": 78,\n  \"summary\": \"...\",\n  \"reasoning\": [\"...\", \"...\"],\n  \"key_evidence\": [\"...\", \"...\"]\n}\n\nDo not add extra text outside valid JSON.\n",
+    "input": {
+      "company": "SBI",
+      "ticker": "SBI",
+      "financials": "{\n  \"ticker\": \"SBI\",\n  \"currentPrice\": 7.85,\n  \"highPrice\": 7.86,\n  \"lowPrice\": 7.82,\n  \"openPrice\": 7.83,\n  \"previousClose\": 7.86,\n  \"source\": \"Finnhub\"\n}",
+      "news": "1. techbullion: Crypto News Today: SBI Acquires Bitbank for $289M as Pepeto Tops $10.3M - Japan’s largest financial group just built the biggest crypto exchange in the country. SBI Holdings closed a $289 million deal for Bitbank on June 25, merging three licensed exchanges into one operator holding $6.8 billion in customer assets. The crypto news today is that institutional capital builds infrastructure for the next wave even... Read the full article on TechBullion.\n2. siasat: Telangana offers alternate land to SBI to resolve Raidurg dispute - Hyderabad: The Telangana government has offered alternative land parcels to the State Bank of India (SBI) in an effort to resolve the dispute over a five-acre land parcel in Raidurg. According to officials, SBI representatives recently inspected the proposed sites and are expected to respond after consulting the bank’s headquarters. Telangana proposes three alternative land ... Get the latest updates in Hyderabad City News , Technology , Entertainment , Sports , Politics and Top Stories on WhatsApp & Telegram by subscribing to our channels. You can also download our app for Android and iOS .\n3. yahoo: Japan’s SBI Holdings To Acquire Bitbank For $289 Million - Japanese financial services firm SBI Holdings (OTC: $SBHGF) has agreed to buy cryptocurrency exchange Bitbank for $...\n4. thenewsmill: Eight remanded in Rs 79.85 lakh Ram Mandir donation embezzlement case - Eight individuals, including SBI employees, remanded in a Rs 79.85 lakh embezzlement case linked to Ram Mandir donations, sparking political controversy."
+    },
+    "response": "```json\n{\n  \"decision\": \"INVEST\",\n  \"confidence\": 85,\n  \"summary\": \"SBI Holdings has made a significant strategic move by acquiring Bitbank for $289 million, consolidating its position as Japan's largest cryptocurrency exchange with $6.8 billion in customer assets. This expansion into the digital asset market positions the company for future growth.\",\n  \"reasoning\": [\n    \"The acquisition of Bitbank establishes SBI Holdings as the leading cryptocurrency exchange in Japan, demonstrating a strong strategic focus on growth in the digital asset sector.\",\n    \"This move diversifies SBI's business into a high-growth market, potentially enhancing future revenue streams and market share.\",\n    \"News regarding land disputes and embezzlement cases pertains to State Bank of India (India), which is a separate entity from SBI Holdings (Japan), and therefore does not impact the investment decision for the latter.\"\n  ],\n  \"key_evidence\": [\n    \"SBI Acquires Bitbank for $289M... merging three licensed exchanges into one operator holding $6.8 billion in customer assets.\",\n    \"Japan’s largest financial group just built the biggest crypto exchange in the country.\",\n    \"Japan’s SBI Holdings To Acquire Bitbank For $289 Million.\"\n  ]\n}\n```",
+    "parsed": {
+      "decision": "INVEST",
+      "confidence": 85,
+      "summary": "SBI Holdings has made a significant strategic move by acquiring Bitbank for $289 million, consolidating its position as Japan's largest cryptocurrency exchange with $6.8 billion in customer assets. This expansion into the digital asset market positions the company for future growth.",
+      "reasoning": [
+        "The acquisition of Bitbank establishes SBI Holdings as the leading cryptocurrency exchange in Japan, demonstrating a strong strategic focus on growth in the digital asset sector.",
+        "This move diversifies SBI's business into a high-growth market, potentially enhancing future revenue streams and market share.",
+        "News regarding land disputes and embezzlement cases pertains to State Bank of India (India), which is a separate entity from SBI Holdings (Japan), and therefore does not impact the investment decision for the latter."
+      ],
+      "key_evidence": [
+        "SBI Acquires Bitbank for $289M... merging three licensed exchanges into one operator holding $6.8 billion in customer assets.",
+        "Japan’s largest financial group just built the biggest crypto exchange in the country.",
+        "Japan’s SBI Holdings To Acquire Bitbank For $289 Million."
+      ]
+    },
+    "providerLog": {
+      "provider": "Gemini",
+      "model": "gemini-2.5-flash"
+    },
+    "error": null
+  }
+}

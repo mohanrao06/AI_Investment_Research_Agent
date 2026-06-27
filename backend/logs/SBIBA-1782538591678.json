@@ -1,0 +1,57 @@
+{
+  "company": "SBI Bank Ltd ",
+  "ticker": "SBIBA",
+  "financials": {
+    "ticker": "SBIBA",
+    "currentPrice": 0,
+    "highPrice": 0,
+    "lowPrice": 0,
+    "openPrice": 0,
+    "previousClose": 0,
+    "source": "Finnhub"
+  },
+  "news": [
+    {
+      "source": "siasat",
+      "title": "Telangana offers alternate land to SBI to resolve Raidurg dispute",
+      "snippet": "Hyderabad: The Telangana government has offered alternative land parcels to the State Bank of India (SBI) in an effort to resolve the dispute over a five-acre land parcel in Raidurg. According to officials, SBI representatives recently inspected the proposed sites and are expected to respond after consulting the bank’s headquarters. Telangana proposes three alternative land ... Get the latest updates in Hyderabad City News , Technology , Entertainment , Sports , Politics and Top Stories on WhatsApp & Telegram by subscribing to our channels. You can also download our app for Android and iOS .",
+      "url": "https://www.siasat.com/telangana-offers-alternate-land-to-sbi-to-resolve-raidurg-dispute-3497016/"
+    },
+    {
+      "source": "themarketsdaily",
+      "title": "Hesai Group (NASDAQ:HSAI) Sets New 12-Month Low – Time to Sell?",
+      "snippet": "Hesai Group Sponsored ADR (NASDAQ:HSAI – Get Free Report) hit a new 52-week low during trading on Friday . The stock traded as low as $14.55 and last traded at $14.4810, with a volume of 19292 shares. The stock had previously closed at $15.02. Analysts Set New Price Targets HSAI has been the topic of [...]",
+      "url": "https://www.themarketsdaily.com/2026/06/26/hesai-group-nasdaqhsai-sets-new-12-month-low-time-to-sell.html"
+    },
+    {
+      "source": "americanbankingnews",
+      "title": "Hsbc Holdings PLC Sells 250,898 Shares of Molson Coors Beverage Company $TAP",
+      "snippet": "Hsbc Holdings PLC decreased its position in shares of Molson Coors Beverage Company (NYSE:TAP – Free Report) by 53.1% during the fourth quarter, according to its most recent filing with the Securities and Exchange Commission. The institutional investor owned 221,610 shares of the company’s stock after selling 250,898 shares during the quarter. Hsbc Holdings PLC [...]",
+      "url": "https://www.americanbankingnews.com/2026/06/26/hsbc-holdings-plc-sells-250898-shares-of-molson-coors-beverage-company-tap.html"
+    }
+  ],
+  "decision": "PASS",
+  "confidence": 50,
+  "summary": "LLM request failed. [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.0-pro-vision:generateContent: [404 Not Found] models/gemini-1.0-pro-vision is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.",
+  "reasoning": [
+    "See raw model response for details."
+  ],
+  "keyEvidence": [],
+  "transcript": {
+    "prompt": "You are an AI investment research assistant.\n\nCompany: {company}\nTicker: {ticker}\nFinancials: {financials}\nRecent news: {news}\n\nUsing the information above, choose one decision: INVEST or PASS.\nProvide a concise, factual answer. Produce a JSON object with these keys only:\n- decision\n- confidence (integer 0-100)\n- summary\n- reasoning\n- key_evidence\n\nExample output:\n{\n  \"decision\": \"INVEST\",\n  \"confidence\": 78,\n  \"summary\": \"...\",\n  \"reasoning\": [\"...\", \"...\"],\n  \"key_evidence\": [\"...\", \"...\"]\n}\n\nDo not add extra text outside valid JSON.\n",
+    "input": {
+      "company": "SBI Bank Ltd ",
+      "ticker": "SBIBA",
+      "financials": "{\n  \"ticker\": \"SBIBA\",\n  \"currentPrice\": 0,\n  \"highPrice\": 0,\n  \"lowPrice\": 0,\n  \"openPrice\": 0,\n  \"previousClose\": 0,\n  \"source\": \"Finnhub\"\n}",
+      "news": "1. siasat: Telangana offers alternate land to SBI to resolve Raidurg dispute - Hyderabad: The Telangana government has offered alternative land parcels to the State Bank of India (SBI) in an effort to resolve the dispute over a five-acre land parcel in Raidurg. According to officials, SBI representatives recently inspected the proposed sites and are expected to respond after consulting the bank’s headquarters. Telangana proposes three alternative land ... Get the latest updates in Hyderabad City News , Technology , Entertainment , Sports , Politics and Top Stories on WhatsApp & Telegram by subscribing to our channels. You can also download our app for Android and iOS .\n2. themarketsdaily: Hesai Group (NASDAQ:HSAI) Sets New 12-Month Low – Time to Sell? - Hesai Group Sponsored ADR (NASDAQ:HSAI – Get Free Report) hit a new 52-week low during trading on Friday . The stock traded as low as $14.55 and last traded at $14.4810, with a volume of 19292 shares. The stock had previously closed at $15.02. Analysts Set New Price Targets HSAI has been the topic of [...]\n3. americanbankingnews: Hsbc Holdings PLC Sells 250,898 Shares of Molson Coors Beverage Company $TAP - Hsbc Holdings PLC decreased its position in shares of Molson Coors Beverage Company (NYSE:TAP – Free Report) by 53.1% during the fourth quarter, according to its most recent filing with the Securities and Exchange Commission. The institutional investor owned 221,610 shares of the company’s stock after selling 250,898 shares during the quarter. Hsbc Holdings PLC [...]"
+    },
+    "response": "",
+    "parsed": null,
+    "providerLog": {
+      "provider": null,
+      "fallbackFrom": null,
+      "model": null
+    },
+    "error": "[GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.0-pro-vision:generateContent: [404 Not Found] models/gemini-1.0-pro-vision is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
+  }
+}

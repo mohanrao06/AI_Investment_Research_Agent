@@ -1,0 +1,56 @@
+{
+  "company": "jio",
+  "ticker": "JIO",
+  "financials": {
+    "ticker": "JIO",
+    "currentPrice": 0,
+    "highPrice": 0,
+    "lowPrice": 0,
+    "openPrice": 0,
+    "previousClose": 0,
+    "source": "Finnhub"
+  },
+  "news": [
+    {
+      "source": "mid_day",
+      "title": "Dhurandhar 2: Ranveer Singh-starrer completes 100 days at the box office",
+      "snippet": "Ranveer Singh's Dhurandhar: The Revenge has successfully completed 100 days at the Indian box office, marking a special milestone for the film. The makers celebrated the achievement with a special post",
+      "url": "https://www.mid-day.com/entertainment/bollywood-news/article/dhurandhar-2-ranveer-singh-starrer-completes-100-days-at-the-box-office-23637024"
+    },
+    {
+      "source": "financialexpress",
+      "title": "Kospi crisis unlikely to hit Indian markets",
+      "snippet": "Market likely to remain rangebound; IT stocks may not face significant pressure",
+      "url": "https://www.financialexpress.com/market/kospi-crisis-unlikely-to-hit-indian-markets-4277444/"
+    },
+    {
+      "source": "latestly",
+      "title": "Business News | Reliance Jio Strengthens Telecom Market Leadership with Subscriber Growth in May 2026: TRAI Data",
+      "snippet": "Get latest articles and stories on Business at LatestLY. Jio also maintained its dominance in the Visitor Location Register (VLR) segment, holding a Customer Market Share (CMS) of 44.2 per cent. The company's VLR share increased by 132 basis points year-on-year, marking the highest annual gain among all telecom operators.",
+      "url": "https://www.latestly.com/agency-news/business-news-reliance-jio-strengthens-telecom-market-leadership-with-subscriber-growth-in-may-2026-trai-data-7491658.html"
+    }
+  ],
+  "decision": "PASS",
+  "confidence": 50,
+  "summary": "LLM request failed. [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [404 Not Found] models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.",
+  "reasoning": [
+    "See raw model response for details."
+  ],
+  "keyEvidence": [],
+  "transcript": {
+    "prompt": "You are an AI investment research assistant.\n\nCompany: {company}\nTicker: {ticker}\nFinancials: {financials}\nRecent news: {news}\n\nUsing the information above, choose one decision: INVEST or PASS.\nProvide a concise, factual answer. Produce a JSON object with these keys only:\n- decision\n- confidence (integer 0-100)\n- summary\n- reasoning\n- key_evidence\n\nExample output:\n{\n  \"decision\": \"INVEST\",\n  \"confidence\": 78,\n  \"summary\": \"...\",\n  \"reasoning\": [\"...\", \"...\"],\n  \"key_evidence\": [\"...\", \"...\"]\n}\n\nDo not add extra text outside valid JSON.\n",
+    "input": {
+      "company": "jio",
+      "ticker": "JIO",
+      "financials": "{\n  \"ticker\": \"JIO\",\n  \"currentPrice\": 0,\n  \"highPrice\": 0,\n  \"lowPrice\": 0,\n  \"openPrice\": 0,\n  \"previousClose\": 0,\n  \"source\": \"Finnhub\"\n}",
+      "news": "1. mid_day: Dhurandhar 2: Ranveer Singh-starrer completes 100 days at the box office - Ranveer Singh's Dhurandhar: The Revenge has successfully completed 100 days at the Indian box office, marking a special milestone for the film. The makers celebrated the achievement with a special post\n2. financialexpress: Kospi crisis unlikely to hit Indian markets - Market likely to remain rangebound; IT stocks may not face significant pressure\n3. latestly: Business News | Reliance Jio Strengthens Telecom Market Leadership with Subscriber Growth in May 2026: TRAI Data - Get latest articles and stories on Business at LatestLY. Jio also maintained its dominance in the Visitor Location Register (VLR) segment, holding a Customer Market Share (CMS) of 44.2 per cent. The company's VLR share increased by 132 basis points year-on-year, marking the highest annual gain among all telecom operators."
+    },
+    "response": "",
+    "parsed": null,
+    "providerLog": {
+      "provider": null,
+      "fallbackFrom": null
+    },
+    "error": "[GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [404 Not Found] models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
+  }
+}

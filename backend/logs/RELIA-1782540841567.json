@@ -1,0 +1,56 @@
+{
+  "company": "Reliance Industries Ltd",
+  "ticker": "RELIA",
+  "financials": {
+    "ticker": "RELIA",
+    "currentPrice": 0,
+    "highPrice": 0,
+    "lowPrice": 0,
+    "openPrice": 0,
+    "previousClose": 0,
+    "source": "Finnhub"
+  },
+  "news": [
+    {
+      "source": "openpr",
+      "title": "Imported Machine Tools Help Upgrade India's New Energy Vehicle Manufacturing",
+      "snippet": "As India's new energy vehicle market continues to expand, local vehicle manufacturers and parts suppliers are accelerating capacity planning. Demand for high-precision machine tools, CNC machining centers, and automated production equipment is also rising. Compared with traditional automobile manufacturing, new energy",
+      "url": "https://www.openpr.com/news/4562071/imported-machine-tools-help-upgrade-india-s-new-energy-vehicle"
+    },
+    {
+      "source": "investingnews",
+      "title": "Zentek Forms U.S. Joint Venture to Position Its Albany Ultra-High-Purity Graphite in the North American National-Security Supply Chain",
+      "snippet": "New U.S. joint venture Strategic Graphite Partners LLC to advance allied-sourced Albany ultra-high-purity graphite for U.S. energy, defense, and national-security markets.Zentek Ltd. (TSXV: ZEN) (NASDAQ: ZTEK) (\"Zentek\" or the \"Company\") today announced it has formed Strategic Graphite Partners LLC ...",
+      "url": "https://investingnews.com/zentek-forms-u-s-joint-venture-to-position-its-albany-ultra-high-purity-graphite-in-the-north-american-national-security-supply-chain/"
+    },
+    {
+      "source": "toi",
+      "title": "Retain Tata Garden as independent public space, say Breach Candy residents",
+      "snippet": "Retain Tata Garden as independent public space, say Breach Candy residents",
+      "url": "https://timesofindia.indiatimes.com/city/mumbai/retain-tata-garden-as-independent-public-space-say-breach-candy-residents/articleshow/132018545.cms"
+    }
+  ],
+  "decision": "PASS",
+  "confidence": 50,
+  "summary": "LLM request failed. [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [429 Too Many Requests] You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 58.437654202s. [{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-2.5-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"58s\"}]",
+  "reasoning": [
+    "See raw model response for details."
+  ],
+  "keyEvidence": [],
+  "transcript": {
+    "prompt": "You are an AI investment research assistant.\n\nCompany: {company}\nTicker: {ticker}\nFinancials: {financials}\nRecent news: {news}\n\nUsing the information above, choose one decision: INVEST or PASS.\nProvide a concise, factual answer. Produce a JSON object with these keys only:\n- decision\n- confidence (integer 0-100)\n- summary\n- reasoning\n- key_evidence\n\nExample output:\n{\n  \"decision\": \"INVEST\",\n  \"confidence\": 78,\n  \"summary\": \"...\",\n  \"reasoning\": [\"...\", \"...\"],\n  \"key_evidence\": [\"...\", \"...\"]\n}\n\nDo not add extra text outside valid JSON.\n",
+    "input": {
+      "company": "Reliance Industries Ltd",
+      "ticker": "RELIA",
+      "financials": "{\n  \"ticker\": \"RELIA\",\n  \"currentPrice\": 0,\n  \"highPrice\": 0,\n  \"lowPrice\": 0,\n  \"openPrice\": 0,\n  \"previousClose\": 0,\n  \"source\": \"Finnhub\"\n}",
+      "news": "1. openpr: Imported Machine Tools Help Upgrade India's New Energy Vehicle Manufacturing - As India's new energy vehicle market continues to expand, local vehicle manufacturers and parts suppliers are accelerating capacity planning. Demand for high-precision machine tools, CNC machining centers, and automated production equipment is also rising. Compared with traditional automobile manufacturing, new energy\n2. investingnews: Zentek Forms U.S. Joint Venture to Position Its Albany Ultra-High-Purity Graphite in the North American National-Security Supply Chain - New U.S. joint venture Strategic Graphite Partners LLC to advance allied-sourced Albany ultra-high-purity graphite for U.S. energy, defense, and national-security markets.Zentek Ltd. (TSXV: ZEN) (NASDAQ: ZTEK) (\"Zentek\" or the \"Company\") today announced it has formed Strategic Graphite Partners LLC ...\n3. toi: Retain Tata Garden as independent public space, say Breach Candy residents - Retain Tata Garden as independent public space, say Breach Candy residents"
+    },
+    "response": "",
+    "parsed": null,
+    "providerLog": {
+      "provider": null,
+      "fallbackFrom": null
+    },
+    "error": "[GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [429 Too Many Requests] You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 58.437654202s. [{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-2.5-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"58s\"}]"
+  }
+}
