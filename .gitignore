@@ -1,5 +1,9 @@
+node_modules/
+**/node_modules/
+
+dist/
+**/dist/
+
 .env
 backend/logs/
 backend/gemini_usage.json
-frontend/dist/
-node_modules/
