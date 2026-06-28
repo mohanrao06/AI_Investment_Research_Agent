@@ -16,7 +16,11 @@
 
 <br>
 
-[**Overview**](#-overview) · [**How to Run**](#-how-to-run-it) · [**How it Works**](#-how-it-works) · [**Decisions**](#-key-decisions--trade-offs) · [**Examples**](#-example-runs) · [**Improvements**](#-what-id-improve-with-more-time) · [**Bonus**](#-bonus--chat-session-logs)
+## 🌐 **[Live Demo → innvestclear.vercel.app](https://innvestclear.vercel.app/)**
+
+<br>
+
+[**Overview**](#-overview) · [**How to Run**](#-how-to-run-it) · [**How it Works**](#-how-it-works) · [**Decisions**](#-key-decisions--trade-offs) · [**Examples**](#-example-runs) · [**Improvements**](#-what-id-improve-with-more-time) · [**Bonus**](#-bonus--chat-session-logs) · [**Screenshots**](#-screenshots)
 
 <br>
 
@@ -424,6 +428,42 @@ Model used: gemini-2.5-flash
 ```
 
 > ⚠️ **Confidence** is the model's stated certainty, not a probability of profit. **PASS** doesn't mean "sell" — it means the framework didn't see a clear positive risk/reward at current prices. Use it as a starting hypothesis, not a signal.
+
+---
+
+## 📸 Screenshots
+
+A quick visual tour of the app — from the search bar on the home page to the full research report, including the raw news evidence and the model's transcript.
+
+### 🏠 Home page — search bar
+
+The landing page. Type a company name (or ticker) and the pipeline does the rest.
+
+<p align="center">
+  <img src="Results/01_Homepage.jpeg" alt="InvestClear home page — search bar" width="48%" />
+</p>
+
+### 📊 Research report — INVEST verdict (Apple)
+
+The full report: live price + fundamentals, an `INVEST` decision, the summary thesis, the reasoning, and the cited news evidence.
+
+<p align="center">
+  <img src="Results/Evidence01.jpeg" alt="Apple — INVEST decision card with price, fundamentals, and confidence" width="48%" />
+  <img src="Results/Evidence02.jpeg" alt="Summary thesis and reasoning for Apple" width="48%" />
+  <br>
+  <img src="Results/Evidence03.jpeg" alt="Key evidence and reasoning for Apple" width="48%" />
+  <img src="Results/Evidence04.jpeg" alt="Evidence & news cards for Apple" width="48%" />
+</p>
+
+### 📑 About page
+
+What InvestClear is, who built it, and the stack it runs on.
+
+<p align="center">
+  <img src="Results/02_Aboutpage.jpeg" alt="InvestClear about page" width="48%" />
+</p>
+
+> 💡 All screenshots are stored in the [`Results/`](Results/) folder at the repo root and are regenerated on each release.
 
 ---
 

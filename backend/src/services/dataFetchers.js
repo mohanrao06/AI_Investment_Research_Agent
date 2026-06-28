@@ -1,54 +1,38 @@
-/**
- * Resolve a company name or ticker to a symbol that Finnhub/Yahoo can understand.
- * - If the input already looks like a ticker (letters, numbers, dot) → uppercase it.
- * * Otherwise try:
- *   1) Remove spaces and non‑alphanumeric/dot, uppercase (e.g. "ICICI Bank" -> "ICICIBANK")
- *   2) Take first word, keep only letters, uppercase (fallback)
- * The result is logged for debugging.
- */
 export async function resolveTicker(company) {
   if (!company) return '';
-  
-  // Special case mappings for Indian companies
+
   const specialMappings = {
     'HDFC': 'HDFCBANK',
     'HDFC Bank': 'HDFCBANK',
     'HDFCBANK': 'HDFCBANK',
   };
-  
+
   const normalized = company.trim();
   if (specialMappings[normalized]) {
     const ticker = specialMappings[normalized];
     console.log(`[resolveTicker] Input "${company}" → special mapping "${ticker}"`);
     return ticker;
   }
-  
-  // Already looks like a ticker? (allow letters, numbers, dot)
+
   if (/^[A-Z0-9\.]+$/i.test(company)) {
     const ticker = company.toUpperCase();
     console.log(`[resolveTicker] Input "${company}" → ticker "${ticker}"`);
     return ticker;
   }
-  // Candidate 1: remove spaces and non‑alphanumeric/dot
   const cand1 = company
-    .replace(/\s+/g, '') // remove spaces
-    .replace(/[^A-Z0-9\.]/gi, '') // keep only alphanumeric and dot
+    .replace(/\s+/g, '')
+    .replace(/[^A-Z0-9\.]/gi, '')
     .toUpperCase();
   if (cand1) {
     console.log(`[resolveTicker] Input "${company}" → candidate1 "${cand1}"`);
     return cand1;
   }
-  // Candidate 2: first word, strip non‑letters
   const firstWord = (company.split(/\s+/)[0] || '').replace(/[^A-Z]/gi, '').toUpperCase();
-  const ticker = firstWord || company.toUpperCase().replace(/\s+/g, ''); // fallback
+  const ticker = firstWord || company.toUpperCase().replace(/\s+/g, '');
   console.log(`[resolveTicker] Input "${company}" → ticker "${ticker}"`);
   return ticker;
 }
 
-/**
- * Fetch fundamental metrics (P/E, P/B, ROE, dividend yield, etc.) for a ticker.
- * Uses Finnhub Company Profile and Quote endpoints.
- */
 export async function fetchFundamentals(ticker) {
   const finnhubKey = process.env.FINNHUB_API_KEY || process.env.DATA_API_KEY;
   if (!finnhubKey || !ticker) {
@@ -57,14 +41,13 @@ export async function fetchFundamentals(ticker) {
   }
 
   const suffixes = ['', '.NS', '.BO'];
-  
+
   for (const suffix of suffixes) {
     const symbol = `${ticker}${suffix}`;
-    
-    // Try to get company profile for fundamental metrics
+
     const profileUrl = `https://finnhub.io/api/v1/stock/profile2?symbol=${encodeURIComponent(symbol)}&token=${finnhubKey}`;
     console.log(`[fetchFundamentals] Trying Finnhub profile: ${profileUrl}`);
-    
+
     try {
       const res = await fetch(profileUrl);
       if (!res.ok) {
@@ -73,7 +56,7 @@ export async function fetchFundamentals(ticker) {
       }
       const data = await res.json();
       console.log(`[fetchFundamentals] Profile data for ${symbol}:`, JSON.stringify(data, null, 2));
-      
+
       if (data && Object.keys(data).length > 0) {
         const fundamentals = {
           marketCap: data.marketCapitalization ?? null,
@@ -96,28 +79,16 @@ export async function fetchFundamentals(ticker) {
   return {};
 }
 
-/**
- * Fetch comprehensive financial data including price and fundamentals.
- * Combines Yahoo Finance price data with Finnhub fundamentals.
- */
 export async function fetchComprehensiveFinancials(ticker) {
   const priceData = await fetchFinancials(ticker);
   const fundamentals = await fetchFundamentals(ticker);
-  
+
   return {
     ...priceData,
     ...fundamentals,
   };
 }
 
-/**
- * Fetch financial data for a ticker.
- * Tries Finnhub with several suffixes (none, .NS, .BO).
- * If all fail, falls back to a free Yahoo Finance endpoint.
- * Logs the URL and the raw response for each attempt.
- * Considers a response successful only if we have a non‑zero current price
- * (or at least one of high/low/open/previousClose > 0) and a valid timestamp.
- */
 export async function fetchFinancials(ticker) {
   const finnhubKey = process.env.FINNHUB_API_KEY || process.env.DATA_API_KEY;
   if (!finnhubKey || !ticker) {
@@ -134,7 +105,6 @@ export async function fetchFinancials(ticker) {
     };
   }
 
-  // Try Finnhub with possible suffixes
   const suffixes = ['', '.NS', '.BO'];
   for (const suffix of suffixes) {
     const symbol = `${ticker}${suffix}`;
@@ -149,7 +119,6 @@ export async function fetchFinancials(ticker) {
       const data = await res.json();
       console.log(`[fetchFinancials] Finnhub raw response for ${symbol}:`, JSON.stringify(data, null, 2));
 
-      // Consider it a success if we have a meaningful price and timestamp
       const current = data.c ?? 0;
       const high = data.h ?? 0;
       const low = data.l ?? 0;
@@ -157,7 +126,6 @@ export async function fetchFinancials(ticker) {
       const prevClose = data.pc ?? 0;
       const timestamp = data.t ?? 0;
 
-      // We require at least one price > 0 and a recent timestamp (timestamp > 0)
       if (
         (current > 0 || high > 0 || low > 0 || open > 0 || prevClose > 0) &&
         timestamp > 0
@@ -181,8 +149,6 @@ export async function fetchFinancials(ticker) {
     }
   }
 
-  // ----- Fallback: Yahoo Finance (no API key) -----
-  // Try Yahoo Finance with different suffixes for Indian stocks
   const yahooSuffixes = ['', '.NS', '.BO'];
   for (const suffix of yahooSuffixes) {
     const yahooSymbol = `${ticker}${suffix}`;
@@ -204,8 +170,7 @@ export async function fetchFinancials(ticker) {
       }
       const meta = result.meta;
       const quote = result.indicators?.quote?.[0];
-      
-      // Check if we have valid data
+
       const currentPrice = meta.regularMarketPrice ?? null;
       if (currentPrice && currentPrice > 0) {
         const yahooResult = {
@@ -236,9 +201,7 @@ export async function fetchFinancials(ticker) {
   }
 
   console.warn('[fetchFinancials] All Yahoo Finance attempts failed');
-  
 
-  // ----- Final fallback -----
   console.log('[fetchFinancials] All sources failed – returning fallback object');
   return {
     ticker,
@@ -252,14 +215,6 @@ export async function fetchFinancials(ticker) {
   };
 }
 
-/**
- * Fetch news articles for a company.
- * Uses NewsAPI.org if key present, otherwise NewsData.org.
- * Requests up to 10 articles, then filters for relevance
- * (title or description contains company name or ticker).
- * Returns up to 5 most relevant articles.
- * Logs the request URL and the raw response.
- */
 export async function fetchNews(company) {
   const newsKey =
     process.env.NEWS_API_KEY ||
@@ -279,16 +234,11 @@ export async function fetchNews(company) {
 
   const isNewData = Boolean(process.env.NEWSDATA_API_KEY);
   const ticker = await resolveTicker(company);
-  // Build query: we want articles that mention either the company name or the ticker.
-  // For NewsAPI.org we can use q=""company\" OR \"ticker\"" (quoted for exact phrase).
-  // For newsdata.io we can use q="company" OR "ticker" (they support OR).
   const query = encodeURIComponent(`"${company}" OR "${ticker}"`);
   let url;
   if (isNewData) {
-    // newsdata.io: size param max 10
     url = `https://newsdata.io/api/1/news?apikey=${encodeURIComponent(newsKey)}&q=${query}&language=en&size=10`;
   } else {
-    // newsapi.org: pageSize max 100
     url = `https://newsapi.org/v2/everything?q=${query}&language=en&sortBy=publishedAt&pageSize=10&apiKey=${encodeURIComponent(newsKey)}`;
   }
 
@@ -317,7 +267,6 @@ export async function fetchNews(company) {
     }
     console.log(`[fetchNews] Received ${articles.length} articles before filtering`);
 
-    // Filter: keep articles where title or description contains company name or ticker (case‑insensitive)
     const companyLower = company.toLowerCase();
     const tickerLower = ticker.toLowerCase();
     const relevant = articles.filter((a) => {
@@ -332,7 +281,6 @@ export async function fetchNews(company) {
     });
     console.log(`[fetchNews] ${relevant.length} articles passed relevance filter`);
 
-    // Take up to 5 most recent (they are already sorted by publishedAt)
     const top = relevant.slice(0, 5).map((article) => ({
       source: article.source?.name || article.source_id || article.source || 'News',
       title: article.title || 'No title',

@@ -8,10 +8,6 @@ import { fetchNews, resolveTicker, fetchComprehensiveFinancials } from './dataFe
 
 const TEMPERATURE = Number(process.env.LLM_TEMPERATURE ?? 0.2)
 
-// -------- Gemini models and usage tracker (free‑tier quota, PT‑aligned, multi-model) --------
-// const DAILY_LIMIT = 1000 // free‑tier limit per model
-
-// Available Gemini models to rotate through - each has its own quota
 const GEMINI_MODELS = [
   'gemini-3.1-flash-lite',
   'gemini-3.5-flash',
@@ -19,12 +15,7 @@ const GEMINI_MODELS = [
   'gemini-2.5-flash'
 ]
 
-/**
- * Returns the current date in America/Los_Angeles (Pacific Time) as YYYY-MM-DD.
- * This matches the daily reset boundary used by Google’s free‑tier quotas.
- */
 function getPtDateString() {
-  // Using toLocaleString with timeZone avoids needing external libraries.
   return new Date().toLocaleString('en-US', {
     timeZone: 'America/Los_Angeles',
     year: 'numeric',
@@ -33,69 +24,8 @@ function getPtDateString() {
   }).replace(/\//g, '-')
 }
 
-/**
- * Reads the usage file, returns the usage object for today.
- * Format: { date: 'YYYY-MM-DD', models: { 'model-name': count, ... } }
- */
-// async function getUsageData() {
-//   let data = { date: '', models: {} }
-//   try {
-//     const raw = await fs.readFile(USAGE_FILE, 'utf8')
-//     data = JSON.parse(raw)
-//   } catch (_) {
-//     // file doesn't exist or is invalid – start fresh
-//   }
-
-//   const todayPt = getPtDateString()
-//   if (data.date !== todayPt) {
-//     // new PT day – reset counters
-//     data = { date: todayPt, models: {} }
-//     GEMINI_MODELS.forEach(model => {
-//       data.models[model] = 0
-//     })
-//   }
-
-//   return data
-// }
-
-/**
- * Increment usage for the given model and persist.
- */
-// async function incrementModelUsage(modelName) {
-//   const data = await getUsageData()
-//   data.models[modelName] = (data.models[modelName] || 0) + 1
-//   await fs.writeFile(USAGE_FILE, JSON.stringify(data), 'utf8')
-// }
-
-/**
- * Check if any Gemini model still has free‑tier quota left today.
- */
-// async function canUseGemini() {
-//   const data = await getUsageData()
-//   return GEMINI_MODELS.some((m) => (data.models[m] || 0) < DAILY_LIMIT)
-// }
-
-/**
- * Pick the model with the lowest usage that still has quota left.
- * Returns null when every model is exhausted.
- */
-// async function pickModelWithQuota() {
-//   const data = await getUsageData()
-//   let best = null
-//   let lowest = Infinity
-//   for (const model of GEMINI_MODELS) {
-//     const count = data.models[model] || 0
-//     if (count < DAILY_LIMIT && count < lowest) {
-//       best = model
-//       lowest = count
-//     }
-//   }
-//   return best
-// }
-
-// -------- Simple in‑memory cache to avoid duplicate calls --------
-const CACHE = new Map() // key -> { timestamp: number, result: any }
-const CACHE_TTL_MS = 5 * 60 * 1000 // 5 minutes
+const CACHE = new Map()
+const CACHE_TTL_MS = 5 * 60 * 1000
 
 function getFromCache(company) {
   const entry = CACHE.get(company)
@@ -111,7 +41,6 @@ function setInCache(company, result) {
   CACHE.set(company, { timestamp: Date.now(), result })
 }
 
-// -------- Gemini model helper --------
 function createGeminiModel(modelName) {
   return new ChatGoogleGenerativeAI({
     apiKey: process.env.GEMINI_API_KEY,
@@ -137,19 +66,10 @@ function getResponseText(response) {
   return JSON.stringify(response)
 }
 
-/**
- * Simple sleep helper (ms)
- */
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
 
-/**
- * Invoke Gemini with multi-model rotation, exponential backoff on 429, and
- * automatic failover to the next model when one hits its quota.
- * Uses `pickModelWithQuota` so each request goes to the model with the lowest
- * usage that still has free‑tier capacity left (≈5 × 20 = 100 req/day total).
- */
 async function invokeWithFallback(prompt) {
   let lastError = null;
 
@@ -192,7 +112,6 @@ async function invokeWithFallback(prompt) {
   throw err;
 }
 
-// -------- Prompt & parsing (unchanged) --------
 const promptTemplate = `You are an AI investment research assistant with expertise in fundamental analysis.
 
 Company: {company}
@@ -246,50 +165,36 @@ async function parseJsonResponse(text) {
   }
 }
 
-/**
- * Format financial data for better readability in the prompt.
- */
 function formatFinancials(data) {
   const parts = [];
-  
-  // Price Information
+
   if (data.currentPrice) parts.push(`Current Price: ${data.currency || 'USD'} ${data.currentPrice}`);
   if (data.highPrice) parts.push(`Day High: ${data.currency || 'USD'} ${data.highPrice}`);
   if (data.lowPrice) parts.push(`Day Low: ${data.currency || 'USD'} ${data.lowPrice}`);
   if (data.openPrice) parts.push(`Open Price: ${data.currency || 'USD'} ${data.openPrice}`);
   if (data.previousClose) parts.push(`Previous Close: ${data.currency || 'USD'} ${data.previousClose}`);
-  
-  // 52-week range
+
   if (data.fiftyTwoWeekHigh || data.fiftyTwoWeekLow) {
     parts.push(`52-Week Range: ${data.currency || 'USD'} ${data.fiftyTwoWeekLow} - ${data.fiftyTwoWeekHigh}`);
   }
-  
-  // Volume
+
   if (data.volume) parts.push(`Volume: ${(data.volume / 1000000).toFixed(2)}M`);
-  
-  // Fundamental Metrics
+
   if (data.peRatio) parts.push(`P/E Ratio: ${data.peRatio.toFixed(2)}`);
   if (data.dividendYield) parts.push(`Dividend Yield: ${(data.dividendYield * 100).toFixed(2)}%`);
   if (data.eps) parts.push(`EPS: ${data.eps.toFixed(2)}`);
   if (data.marketCap) parts.push(`Market Cap: ${data.marketCap.toFixed(0)} (millions)`);
-  
-  // Company Info
+
   if (data.longName) parts.push(`Company: ${data.longName}`);
   if (data.exchange) parts.push(`Exchange: ${data.exchange}`);
   if (data.industry) parts.push(`Industry: ${data.industry}`);
-  
-  // Source
+
   if (data.source) parts.push(`Data Source: ${data.source}`);
-  
+
   return parts.join('\n');
 }
 
-/**
- * Main exported function – called by the route handler.
- * Includes a simple cache to avoid duplicate API calls for the same company.
- */
 export async function runResearch(company) {
-  // 1️⃣ Check cache first
   const cached = getFromCache(company)
   if (cached) {
     console.warn(`Returning cached result for ${company}`)
@@ -324,9 +229,8 @@ export async function runResearch(company) {
     text = getResponseText(response)
     parsed = await parseJsonResponse(text)
   } catch (error) {
-    // If we hit quota exhaustion we want to return a fallback instead of bubbling up.
     if (error.quotaExhausted) {
-      errorMessage = `Gemini daily quota exhausted (~${DAILY_LIMIT * GEMINI_MODELS.length} requests across all models). Returning fallback.`
+      errorMessage = `Gemini daily quota exhausted. Returning fallback.`
       console.warn(errorMessage)
     } else {
       errorMessage = error?.message || 'LLM request failed'
@@ -360,7 +264,6 @@ export async function runResearch(company) {
     },
   }
 
-  // 2️⃣ Store in cache for future duplicate requests
   setInCache(company, resultObj)
 
   if (process.env.LOG_LLM_TRANSCRIPTS === 'true') {
