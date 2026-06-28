@@ -126,7 +126,7 @@ async function invokeWithFallback(prompt) {
     throw err
   }
 
-  const modelName = process.env.GEMINI_MODEL || 'gemini-2.5-flash-lite'
+  const modelName = process.env.GEMINI_MODEL || 'gemini-2.5-flash'
   const maxRetries = 5
   let attempt = 0
   let delayMs = 1000 // start with 1 second

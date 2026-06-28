@@ -1,27 +1,25 @@
-import React, { useState } from 'react'
-import SearchBar from './components/SearchBar'
-import DecisionCard from './components/DecisionCard'
-import EvidenceList from './components/EvidenceList'
+import React, { useEffect, useState } from 'react'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import Layout from './components/Layout'
+import HomePage from './pages/HomePage'
+import AboutPage from './pages/AboutPage'
 
 export default function App() {
-  const [result, setResult] = useState(null)
+  const [theme, setTheme] = useState(() => localStorage.getItem('northstar-theme') || 'light')
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme)
+    localStorage.setItem('northstar-theme', theme)
+  }, [theme])
 
   return (
-    <div style={{ maxWidth: 900, margin: '2rem auto', fontFamily: 'Arial, sans-serif' }}>
-      <h1>AI Investment Research Agent</h1>
-      <SearchBar onResult={setResult} />
-      {result && (
-        <div>
-          <DecisionCard result={result} />
-          <EvidenceList evidence={result.evidence || []} />
-          <details style={{ marginTop: 12 }}>
-            <summary>LLM Transcript (Debug)</summary>
-            <pre style={{ whiteSpace: 'pre-wrap', fontSize: 11, maxHeight: 400, overflowY: 'auto' }}>
-              {JSON.stringify(result.transcript, null, 2)}
-            </pre>
-          </details>
-        </div>
-      )}
-    </div>
+    <BrowserRouter>
+      <Layout theme={theme} onToggleTheme={() => setTheme((current) => (current === 'dark' ? 'light' : 'dark'))}>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/about" element={<AboutPage />} />
+        </Routes>
+      </Layout>
+    </BrowserRouter>
   )
 }

@@ -1,0 +1,75 @@
+{
+  "decision": "PASS",
+  "confidence": 10,
+  "summary": "Apple's financial data is not available, and the provided news articles are irrelevant to the company's operations, making an investment decision impossible.",
+  "evidence": [
+    {
+      "source": "globalnews",
+      "title": "Stampeders ruin Lions’ party with 41-33 win",
+      "snippet": "Vernon Adams Jr. and the Calgary Stampeders played spoiler in front of a capacity crowd at the Apple Bowl, prevailing 41-33 over the B.C. Lions on Saturday evening for their first win of the young CFL season.",
+      "url": "https://globalnews.ca/news/11941895/stampeders-ruin-lions-party-with-41-33-win/"
+    },
+    {
+      "source": "stcatharinesstandard",
+      "title": "Stampeders ruin winless Lions' party at Apple Bowl with 41-33 win",
+      "snippet": "KELOWNA - Vernon Adams Jr. and the Calgary Stampeders played spoiler in front of a capacity crowd at the Apple Bowl, prevailing 41-33 over the B.C. Lions on Saturday evening for their first win of the young CFL season.",
+      "url": "https://www.stcatharinesstandard.ca/sports/football/stampeders-ruin-winless-lions-party-at-apple-bowl-with-41-33-win/article_eb3aa155-d2c0-5d09-a09e-169ee0d6a40f.html"
+    },
+    {
+      "source": "vancouverisawesome",
+      "title": "Stampeders ruin winless Lions' party at Apple Bowl with 41-33 win",
+      "snippet": "KELOWNA — Vernon Adams Jr. and the Calgary Stampeders played spoiler in front of a capacity crowd at the Apple Bowl, prevailing 41-33 over the B.C. Lions on Saturday evening for their first win of the young CFL season.",
+      "url": "https://www.vancouverisawesome.com/national-sports/stampeders-ruin-winless-lions-party-at-apple-bowl-with-41-33-win-12482508"
+    },
+    {
+      "source": "nsnews",
+      "title": "Stampeders ruin winless Lions' party at Apple Bowl with 41-33 win",
+      "snippet": "KELOWNA — Vernon Adams Jr. and the Calgary Stampeders played spoiler in front of a capacity crowd at the Apple Bowl, prevailing 41-33 over the B.C. Lions on Saturday evening for their first win of the young CFL season.",
+      "url": "https://www.nsnews.com/national-sports/stampeders-ruin-winless-lions-party-at-apple-bowl-with-41-33-win-12482508"
+    },
+    {
+      "source": "thestar",
+      "title": "Stampeders ruin winless Lions' party at Apple Bowl with 41-33 win",
+      "snippet": "KELOWNA - Vernon Adams Jr. and the Calgary Stampeders played spoiler in front of a capacity crowd at the Apple Bowl, prevailing 41-33 over the B.C. Lions on Saturday evening for their first win of the young CFL season.",
+      "url": "https://www.thestar.com/sports/football/cfl/stampeders-ruin-winless-lions-party-at-apple-bowl-with-41-33-win/article_4ec2ac88-eb2c-5bf0-a6cc-83e16efa91b8.html"
+    }
+  ],
+  "reasoning": [
+    "The provided financial data for Apple (AAPL) is missing, preventing any fundamental analysis or valuation assessment.",
+    "The news articles discuss a Canadian Football League (CFL) game played at a venue called 'Apple Bowl', which is unrelated to Apple Inc. (AAPL) and its business operations.",
+    "Without financial data and relevant news, it's impossible to evaluate valuation, fundamentals, or potential catalysts and risks associated with Apple Inc."
+  ],
+  "keyEvidence": [
+    "Financial data for Apple (AAPL) is not provided.",
+    "News articles discuss a CFL game at 'Apple Bowl', not Apple Inc. operations."
+  ],
+  "transcript": {
+    "prompt": "You are an AI investment research assistant with expertise in fundamental analysis.\n\nCompany: {company}\nTicker: {ticker}\n\nFinancial Data (includes price, fundamentals, and valuation metrics):\n{financials}\n\nRecent news:\n{news}\n\nUsing the comprehensive financial data and news above, analyze the investment opportunity:\n1. Evaluate valuation: Is P/E ratio reasonable for the industry and growth prospects?\n2. Assess fundamentals: Check profitability (EPS, dividend yield), market cap, 52-week performance\n3. Review news: Are there positive/negative catalysts or operational changes?\n4. Consider risk: Evaluate company strength and market conditions\n\nChoose one decision: INVEST or PASS.\nProvide a concise, factual answer. Produce a JSON object with these keys only:\n- decision\n- confidence (integer 0-100)\n- summary\n- reasoning\n- key_evidence\n\nExample output:\n{\n  \"decision\": \"INVEST\",\n  \"confidence\": 78,\n  \"summary\": \"...\",\n  \"reasoning\": [\"...\", \"...\"],\n  \"key_evidence\": [\"...\", \"...\"]\n}\n\nDo not add extra text outside valid JSON.\n",
+    "input": {
+      "company": "Apple",
+      "ticker": "APPLE",
+      "financials": "Data Source: Fallback",
+      "news": "1. globalnews: Stampeders ruin Lions’ party with 41-33 win - Vernon Adams Jr. and the Calgary Stampeders played spoiler in front of a capacity crowd at the Apple Bowl, prevailing 41-33 over the B.C. Lions on Saturday evening for their first win of the young CFL season.\n2. stcatharinesstandard: Stampeders ruin winless Lions' party at Apple Bowl with 41-33 win - KELOWNA - Vernon Adams Jr. and the Calgary Stampeders played spoiler in front of a capacity crowd at the Apple Bowl, prevailing 41-33 over the B.C. Lions on Saturday evening for their first win of the young CFL season.\n3. vancouverisawesome: Stampeders ruin winless Lions' party at Apple Bowl with 41-33 win - KELOWNA — Vernon Adams Jr. and the Calgary Stampeders played spoiler in front of a capacity crowd at the Apple Bowl, prevailing 41-33 over the B.C. Lions on Saturday evening for their first win of the young CFL season.\n4. nsnews: Stampeders ruin winless Lions' party at Apple Bowl with 41-33 win - KELOWNA — Vernon Adams Jr. and the Calgary Stampeders played spoiler in front of a capacity crowd at the Apple Bowl, prevailing 41-33 over the B.C. Lions on Saturday evening for their first win of the young CFL season.\n5. thestar: Stampeders ruin winless Lions' party at Apple Bowl with 41-33 win - KELOWNA - Vernon Adams Jr. and the Calgary Stampeders played spoiler in front of a capacity crowd at the Apple Bowl, prevailing 41-33 over the B.C. Lions on Saturday evening for their first win of the young CFL season."
+    },
+    "response": "```json\n{\n  \"decision\": \"PASS\",\n  \"confidence\": 10,\n  \"summary\": \"Apple's financial data is not available, and the provided news articles are irrelevant to the company's operations, making an investment decision impossible.\",\n  \"reasoning\": [\n    \"The provided financial data for Apple (AAPL) is missing, preventing any fundamental analysis or valuation assessment.\",\n    \"The news articles discuss a Canadian Football League (CFL) game played at a venue called 'Apple Bowl', which is unrelated to Apple Inc. (AAPL) and its business operations.\",\n    \"Without financial data and relevant news, it's impossible to evaluate valuation, fundamentals, or potential catalysts and risks associated with Apple Inc.\"\n  ],\n  \"key_evidence\": [\n    \"Financial data for Apple (AAPL) is not provided.\",\n    \"News articles discuss a CFL game at 'Apple Bowl', not Apple Inc. operations.\"\n  ]\n}\n```",
+    "parsed": {
+      "decision": "PASS",
+      "confidence": 10,
+      "summary": "Apple's financial data is not available, and the provided news articles are irrelevant to the company's operations, making an investment decision impossible.",
+      "reasoning": [
+        "The provided financial data for Apple (AAPL) is missing, preventing any fundamental analysis or valuation assessment.",
+        "The news articles discuss a Canadian Football League (CFL) game played at a venue called 'Apple Bowl', which is unrelated to Apple Inc. (AAPL) and its business operations.",
+        "Without financial data and relevant news, it's impossible to evaluate valuation, fundamentals, or potential catalysts and risks associated with Apple Inc."
+      ],
+      "key_evidence": [
+        "Financial data for Apple (AAPL) is not provided.",
+        "News articles discuss a CFL game at 'Apple Bowl', not Apple Inc. operations."
+      ]
+    },
+    "providerLog": {
+      "provider": "Gemini",
+      "model": "gemini-2.5-flash-lite"
+    },
+    "error": null
+  }
+}

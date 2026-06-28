@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function DecisionCard({ result }) {
+export default function DecisionCard({ result, query }) {
   if (!result) return null
 
   const {
@@ -13,135 +13,71 @@ export default function DecisionCard({ result }) {
   } = result
 
   const financials = transcript?.input?.financials || ''
+  const decisionType = String(decision || '').toUpperCase() === 'INVEST' ? 'invest' : 'avoid'
+  const evidenceItems = Array.isArray(keyEvidence) ? keyEvidence : []
+  const reasoningItems = Array.isArray(reasoning) ? reasoning : []
+  const companyLabel = query || 'Company'
 
-  const decisionColor = decision === 'INVEST' ? '#27ae60' : '#e74c3c'
-  const decisionBgColor = decision === 'INVEST' ? '#d5f4e6' : '#fadbd8'
+  const overviewText = summary || 'No summary available.'
+  const newsText = evidenceItems.length > 0 ? evidenceItems.slice(0, 3).join(' ') : 'Recent news context is being surfaced as the report is generated.'
+  const thesisText = reasoningItems.length > 0 ? reasoningItems.join(' ') : 'The investment thesis will be expanded as more evidence is gathered.'
+  const riskText = 'Market volatility, execution risk, and data-quality variance should be validated with additional diligence.'
+  const conclusionText = `${decision || 'Review'} with ${confidence || '—'}% confidence. The report offers a structured starting point for deeper diligence.`
 
   return (
-    <div style={{
-      border: `2px solid ${decisionColor}`,
-      borderRadius: 8,
-      padding: 20,
-      marginTop: 20,
-      backgroundColor: '#f9f9f9',
-      fontFamily: 'Segoe UI, Tahoma, Geneva, Verdana, sans-serif',
-    }}>
-      {/* Header */}
-      <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        borderBottom: `2px solid ${decisionColor}`,
-        paddingBottom: 15,
-        marginBottom: 15,
-      }}>
-        <h1 style={{
-          margin: 0,
-          fontSize: 28,
-          color: decisionColor,
-        }}>
-          {decision || '—'}
-        </h1>
-        <div style={{
-          backgroundColor: decisionBgColor,
-          padding: '8px 16px',
-          borderRadius: 20,
-          fontWeight: 'bold',
-          color: decisionColor,
-          fontSize: 16,
-        }}>
-          Confidence: {confidence}%
+    <section className={`report-shell decision-card decision-card--${decisionType}`}>
+      <div className="report-shell__intro">
+        <div>
+          <p className="section-label">Generated report</p>
+          <h3>{companyLabel}</h3>
+          <p>Structured analysis with key context and supporting evidence.</p>
+        </div>
+        <div className="report-shell__meta">
+          <span className="report-chip">{decision || 'Review'}</span>
+          <span className="report-chip report-chip--muted">Confidence {confidence || '—'}%</span>
         </div>
       </div>
 
-      {/* Summary */}
-      <div style={{ marginBottom: 20 }}>
-        <h3 style={{ color: '#2c3e50', marginTop: 0, marginBottom: 10 }}>Summary</h3>
-        <p style={{
-          backgroundColor: '#ecf0f1',
-          padding: 12,
-          borderRadius: 4,
-          lineHeight: 1.6,
-          color: '#2c3e50',
-          margin: 0,
-        }}>
-          {summary || 'No summary available'}
-        </p>
+      <div className="report-section">
+        <h4>Company Overview</h4>
+        <p>{overviewText}</p>
       </div>
 
-      {/* Financial Data */}
-      {financials && (
-        <div style={{ marginBottom: 20 }}>
-          <h3 style={{ color: '#2c3e50', marginTop: 0, marginBottom: 10 }}>Financial Data</h3>
-          <pre style={{
-            backgroundColor: '#ecf0f1',
-            padding: 12,
-            borderRadius: 4,
-            fontSize: 12,
-            maxHeight: 200,
-            overflowY: 'auto',
-            whiteSpace: 'pre-wrap',
-            wordWrap: 'break-word',
-            margin: 0,
-            color: '#2c3e50',
-          }}>
-            {financials}
-          </pre>
-        </div>
-      )}
-
-      {/* Key Evidence */}
-      {keyEvidence && keyEvidence.length > 0 && (
-        <div style={{ marginBottom: 20 }}>
-          <h3 style={{ color: '#2c3e50', marginTop: 0, marginBottom: 10 }}>Key Evidence</h3>
-          <ul style={{
-            margin: 0,
-            paddingLeft: 20,
-          }}>
-            {keyEvidence.map((evidence, idx) => (
-              <li key={idx} style={{
-                marginBottom: 8,
-                color: '#2c3e50',
-                lineHeight: 1.5,
-              }}>
-                {evidence}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-
-      {/* Reasoning */}
-      {reasoning && reasoning.length > 0 && (
-        <div style={{ marginBottom: 20 }}>
-          <h3 style={{ color: '#2c3e50', marginTop: 0, marginBottom: 10 }}>Analysis & Reasoning</h3>
-          <ol style={{
-            margin: 0,
-            paddingLeft: 20,
-          }}>
-            {reasoning.map((reason, idx) => (
-              <li key={idx} style={{
-                marginBottom: 8,
-                color: '#2c3e50',
-                lineHeight: 1.5,
-              }}>
-                {reason}
-              </li>
-            ))}
-          </ol>
-        </div>
-      )}
-
-      {/* Data Source */}
-      <div style={{
-        borderTop: '1px solid #bdc3c7',
-        paddingTop: 12,
-        marginTop: 12,
-        fontSize: 12,
-        color: '#7f8c8d',
-      }}>
-        Data Source: {transcript?.input?.financials?.includes('YahooFinance') ? 'Yahoo Finance + NewsData API' : 'Mixed Sources'} | Model: {transcript?.providerLog?.provider}
+      <div className="report-section">
+        <h4>AI Summary</h4>
+        <p>{overviewText}</p>
       </div>
-    </div>
+
+      {financials ? (
+        <div className="report-section">
+          <h4>Financial Analysis</h4>
+          <pre>{financials}</pre>
+        </div>
+      ) : null}
+
+      <div className="report-section">
+        <h4>News Analysis</h4>
+        <p>{newsText}</p>
+      </div>
+
+      <div className="report-section">
+        <h4>Investment Thesis</h4>
+        <p>{thesisText}</p>
+      </div>
+
+      <div className="report-section">
+        <h4>Risks</h4>
+        <p>{riskText}</p>
+      </div>
+
+      <div className="report-section">
+        <h4>Conclusion</h4>
+        <p>{conclusionText}</p>
+      </div>
+
+      <div className="decision-card__footer">
+        Data source: {transcript?.input?.financials?.includes('YahooFinance') ? 'Yahoo Finance + NewsData API' : 'Mixed sources'} | Model: {transcript?.providerLog?.provider || 'Unknown'}
+      </div>
+    </section>
   )
 }
