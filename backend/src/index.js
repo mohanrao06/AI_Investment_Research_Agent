@@ -1,8 +1,5 @@
 import dotenv from 'dotenv'
-const result = dotenv.config({ path: '../.env' })
-console.log('Dotenv result:', result)
-console.log('PORT:', process.env.PORT)
-console.log('OPENAI_API_KEY:', process.env.OPENAI_API_KEY ? 'SET' : 'NOT SET')
+dotenv.config({ path: '../.env' })
 
 import express from 'express'
 import cors from 'cors'

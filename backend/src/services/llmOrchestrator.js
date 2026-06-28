@@ -1,23 +1,24 @@
-// import dotenv from 'dotenv'
-// dotenv.config()
-
-// Keeping dotenv for environment variables
 import dotenv from 'dotenv'
 dotenv.config()
 
 import fs from 'fs/promises'
 import path from 'path'
-// import { ChatOpenAI } from '@langchain/openai' // Commented out to use only Gemini
 import { ChatGoogleGenerativeAI } from '@langchain/google-genai'
-import { fetchFinancials, fetchNews, resolveTicker, fetchComprehensiveFinancials } from './dataFetchers.js'
+import { fetchNews, resolveTicker, fetchComprehensiveFinancials } from './dataFetchers.js'
 
-const OPENAI_MODEL = process.env.OPENAI_MODEL || 'gpt-3.5-turbo'
-// We'll use Gemini models only; OpenAI code remains commented out
 const TEMPERATURE = Number(process.env.LLM_TEMPERATURE ?? 0.2)
 
-// -------- Gemini usage tracker (free‑tier quota, PT‑aligned) --------
+// -------- Gemini models and usage tracker (free‑tier quota, PT‑aligned, multi-model) --------
 const USAGE_FILE = path.join(process.cwd(), 'gemini_usage.json')
-const DAILY_LIMIT = 20 // free‑tier limit for gemini‑2.5‑flsh
+const DAILY_LIMIT = 20 // free‑tier limit per model
+
+// Available Gemini models to rotate through - each has its own quota
+const GEMINI_MODELS = [
+  'gemini-3.1-flash-lite',
+  'gemini-3.5-flash',
+  'gemini-2.5-flash-lite',
+  'gemini-2.5-flash'
+]
 
 /**
  * Returns the current date in America/Los_Angeles (Pacific Time) as YYYY-MM-DD.
@@ -34,12 +35,11 @@ function getPtDateString() {
 }
 
 /**
- * Reads the usage file, resets the count if the PT date changed,
- * increments the counter and returns true if we are still under the limit.
- * If we would exceed the limit, returns false (do not call the API).
+ * Reads the usage file, returns the usage object for today.
+ * Format: { date: 'YYYY-MM-DD', models: { 'model-name': count, ... } }
  */
-async function canUseGemini() {
-  let data = { date: '', count: 0 }
+async function getUsageData() {
+  let data = { date: '', models: {} }
   try {
     const raw = await fs.readFile(USAGE_FILE, 'utf8')
     data = JSON.parse(raw)
@@ -49,18 +49,49 @@ async function canUseGemini() {
 
   const todayPt = getPtDateString()
   if (data.date !== todayPt) {
-    // new PT day – reset counter
-    data = { date: todayPt, count: 0 }
+    // new PT day – reset counters
+    data = { date: todayPt, models: {} }
+    GEMINI_MODELS.forEach(model => {
+      data.models[model] = 0
+    })
   }
 
-  if (data.count >= DAILY_LIMIT) {
-    return false // quota exhausted for today
-  }
+  return data
+}
 
-  // increment and persist
-  data.count += 1
+/**
+ * Increment usage for the given model and persist.
+ */
+async function incrementModelUsage(modelName) {
+  const data = await getUsageData()
+  data.models[modelName] = (data.models[modelName] || 0) + 1
   await fs.writeFile(USAGE_FILE, JSON.stringify(data), 'utf8')
-  return true
+}
+
+/**
+ * Check if any Gemini model still has free‑tier quota left today.
+ */
+async function canUseGemini() {
+  const data = await getUsageData()
+  return GEMINI_MODELS.some((m) => (data.models[m] || 0) < DAILY_LIMIT)
+}
+
+/**
+ * Pick the model with the lowest usage that still has quota left.
+ * Returns null when every model is exhausted.
+ */
+async function pickModelWithQuota() {
+  const data = await getUsageData()
+  let best = null
+  let lowest = Infinity
+  for (const model of GEMINI_MODELS) {
+    const count = data.models[model] || 0
+    if (count < DAILY_LIMIT && count < lowest) {
+      best = model
+      lowest = count
+    }
+  }
+  return best
 }
 
 // -------- Simple in‑memory cache to avoid duplicate calls --------
@@ -115,26 +146,39 @@ function sleep(ms) {
 }
 
 /**
- * Invoke the Gemini model with exponential backoff on 429.
- * We still respect the usage‑tracker – if the tracker says “no”, we never call the API.
+ * Invoke Gemini with multi-model rotation, exponential backoff on 429, and
+ * automatic failover to the next model when one hits its quota.
+ * Uses `pickModelWithQuota` so each request goes to the model with the lowest
+ * usage that still has free‑tier capacity left (≈5 × 20 = 100 req/day total).
  */
 async function invokeWithFallback(prompt) {
   if (!(await canUseGemini())) {
-    // Quota exhausted for today – return a synthetic error that the caller can treat as a fallback.
-    const err = new Error('Gemini daily quota exhausted (20 requests).')
+    const err = new Error(
+      `All Gemini models at quota for today (${DAILY_LIMIT * GEMINI_MODELS.length} requests).`
+    )
     err.quotaExhausted = true
     throw err
   }
 
-  const modelName = process.env.GEMINI_MODEL || 'gemini-2.5-flash'
-  const maxRetries = 5
+  const maxRetries = 4
   let attempt = 0
-  let delayMs = 1000 // start with 1 second
+  let delayMs = 1000
+  let triedModels = new Set()
 
   while (attempt <= maxRetries) {
+    const modelName = await pickModelWithQuota()
+    if (!modelName || triedModels.has(modelName)) {
+      // No fresh model with quota available — bail.
+      const err = new Error('No Gemini model with remaining quota.')
+      err.quotaExhausted = true
+      throw err
+    }
+    triedModels.add(modelName)
+
     try {
       const model = createGeminiModel(modelName)
       const response = await model.invoke(prompt)
+      await incrementModelUsage(modelName)
       return { response, providerLog: { provider: 'Gemini', model: modelName } }
     } catch (error) {
       const errorMsg = error?.message || ''
@@ -144,28 +188,34 @@ async function invokeWithFallback(prompt) {
         errorMsg.includes('429') &&
         (errorMsg.includes('quota') || errorMsg.includes('Quota'))
 
-      if (isQuotaError && attempt < maxRetries) {
-        // Extract the retry‑delay suggested by the API, if present.
-        // Example: "Please retry in 46.693324673s."
-        const match = errorMsg.match(/Please\s+retry\s+in\s+([0-9.]+)s/i)
-        let suggestedDelay = 0
-        if (match) {
-          const seconds = parseFloat(match[1])
-          suggestedDelay = Math.floor(seconds * 1000) // ms
-        }
-        // Use exponential backoff, but never go below the API‑suggested delay.
-        delayMs = Math.max(delayMs, suggestedDelay)
+      if (isQuotaError) {
+        // Mark this model as exhausted for today and move to the next one.
+        await incrementModelUsage(modelName)
         console.warn(
-          `Gemini 429 quota error (attempt ${attempt + 1}/${maxRetries + 1}). ` +
-            `Waiting ${delayMs}ms before retry…`
+          `Gemini ${modelName} hit 429 quota – rotating to next available model (attempt ${attempt + 1}).`
         )
-        await sleep(delayMs)
-        delayMs = Math.min(delayMs * 2, 30000) // exponential, cap at 30s
         attempt++
         continue
       }
 
-      // Non‑quota error or we’ve exhausted retries
+      if (attempt < maxRetries) {
+        const match = errorMsg.match(/Please\s+retry\s+in\s+([0-9.]+)s/i)
+        let suggestedDelay = 0
+        if (match) {
+          const seconds = parseFloat(match[1])
+          suggestedDelay = Math.floor(seconds * 1000)
+        }
+        delayMs = Math.max(delayMs, suggestedDelay)
+        console.warn(
+          `Gemini ${modelName} transient error (attempt ${attempt + 1}/${maxRetries + 1}): ${errorMsg}. ` +
+            `Waiting ${delayMs}ms before retry…`
+        )
+        await sleep(delayMs)
+        delayMs = Math.min(delayMs * 2, 30000)
+        attempt++
+        continue
+      }
+
       console.warn(`Gemini invoke failed:`, errorMsg)
       throw error
     }
@@ -306,7 +356,7 @@ export async function runResearch(company) {
   } catch (error) {
     // If we hit quota exhaustion we want to return a fallback instead of bubbling up.
     if (error.quotaExhausted) {
-      errorMessage = 'Gemini daily quota exhausted (20 requests). Returning fallback.'
+      errorMessage = `Gemini daily quota exhausted (~${DAILY_LIMIT * GEMINI_MODELS.length} requests across all models). Returning fallback.`
       console.warn(errorMessage)
     } else {
       errorMessage = error?.message || 'LLM request failed'

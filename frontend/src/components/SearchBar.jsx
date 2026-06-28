@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { runResearch } from '../services/api'
 
-export default function SearchBar({ onResult, onQueryChange, onLoadingChange }) {
+export default function SearchBar({ onResult, onQueryChange, onLoadingChange, onError }) {
   const [q, setQ] = useState('')
   const [loading, setLoading] = useState(false)
 
@@ -19,8 +19,8 @@ export default function SearchBar({ onResult, onQueryChange, onLoadingChange }) 
       const res = await runResearch(query)
       onResult?.(res)
     } catch (err) {
-      console.error(err)
-      alert('Error running research: ' + err.message)
+      const message = err?.message ? `Error running research: ${err.message}` : 'Error running research. Please try again.'
+      onError?.(message)
     } finally {
       setLoading(false)
       onLoadingChange?.(false)

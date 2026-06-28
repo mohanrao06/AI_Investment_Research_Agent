@@ -7,7 +7,7 @@ export default function Layout({ children, theme, onToggleTheme }) {
       <header className="topbar">
         <Link className="brand" to="/">
           <span className="brand__mark">✦</span>
-          <span>Northstar Research</span>
+          <span>InvestClear</span>
         </Link>
         <nav className="topnav" aria-label="Primary navigation">
           <NavLink to="/" end>
@@ -22,9 +22,9 @@ export default function Layout({ children, theme, onToggleTheme }) {
       </header>
       {children}
       <footer className="footer">
-        <span>Northstar Research</span>
-        <span>AI-Powered Investment Research</span>
-        <span>© 2026 mohan</span>
+        <span>InvestClear</span>
+        <span>Investment Research Agent</span>
+        <span>© 2026 Mohan</span>
       </footer>
     </div>
   )

@@ -1,1 +1,5 @@
 .env
+backend/logs/
+backend/gemini_usage.json
+frontend/dist/
+node_modules/

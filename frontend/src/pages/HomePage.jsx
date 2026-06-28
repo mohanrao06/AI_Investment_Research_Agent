@@ -38,12 +38,21 @@ const brokerProfiles = [
   },
 ]
 
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
+
 export default function HomePage() {
   const [result, setResult] = useState(null)
   const [query, setQuery] = useState('')
   const [loading, setLoading] = useState(false)
   const [loadingStepIndex, setLoadingStepIndex] = useState(0)
-  const [shareState, setShareState] = useState('')
+  const [status, setStatus] = useState({ tone: 'idle', message: '' })
 
   const brokerLinks = useMemo(() => {
     if (!query.trim()) return []
@@ -64,9 +73,16 @@ export default function HomePage() {
     return () => window.clearInterval(timer)
   }, [loading])
 
+  useEffect(() => {
+    if (!status.message) return undefined
+    if (status.tone !== 'success' && status.tone !== 'info') return undefined
+    const timer = window.setTimeout(() => setStatus({ tone: 'idle', message: '' }), 4000)
+    return () => window.clearTimeout(timer)
+  }, [status])
+
   function handleDownloadPdf() {
     const reportText = [
-      'Northstar Research Report',
+      'InvestClear Research Report',
       `Company: ${query || 'Unknown'}`,
       `Decision: ${result?.decision || '—'}`,
       `Confidence: ${result?.confidence || '—'}%`,
@@ -76,12 +92,15 @@ export default function HomePage() {
     ].join('\n')
 
     const printWindow = window.open('', '_blank', 'width=900,height=700')
-    if (!printWindow) return
+    if (!printWindow) {
+      setStatus({ tone: 'error', message: 'Pop-up blocked. Allow pop-ups to save the PDF.' })
+      return
+    }
 
     printWindow.document.write(`<!doctype html>
       <html>
         <head>
-          <title>Northstar Report</title>
+          <title>InvestClear Report</title>
           <style>
             body { font-family: Arial, sans-serif; padding: 24px; color: #111827; }
             h1 { margin-bottom: 8px; }
@@ -90,40 +109,46 @@ export default function HomePage() {
           </style>
         </head>
         <body>
-          <h1>Northstar Research Report</h1>
-          <div class="meta">Company: ${query || 'Unknown'}</div>
-          <pre>${reportText}</pre>
+          <h1>InvestClear Research Report</h1>
+          <div class="meta">Company: ${escapeHtml(query || 'Unknown')}</div>
+          <pre>${escapeHtml(reportText)}</pre>
         </body>
       </html>`)
     printWindow.document.close()
     printWindow.focus()
     printWindow.print()
-    setShareState('PDF preview opened. Use your browser to save as PDF.')
+    setStatus({ tone: 'info', message: 'PDF preview opened. Use your browser to save as PDF.' })
   }
 
   async function handleShareReport() {
     const reportText = [
-      `Northstar Research Report for ${query || 'Unknown'}`,
+      `InvestClear Research Report for ${query || 'Unknown'}`,
       result?.summary || '',
     ].join('\n')
 
     if (navigator.share) {
       try {
-        await navigator.share({ title: 'Northstar Research Report', text: reportText })
-        setShareState('Report shared successfully.')
+        await navigator.share({ title: 'InvestClear Research Report', text: reportText })
+        setStatus({ tone: 'success', message: 'Report shared successfully.' })
         return
-      } catch {
-        setShareState('Sharing cancelled.')
-        return
+      } catch (error) {
+        if (error?.name === 'AbortError') {
+          setStatus({ tone: 'idle', message: '' })
+          return
+        }
       }
     }
 
     try {
       await navigator.clipboard.writeText(reportText)
-      setShareState('Report copied to clipboard.')
+      setStatus({ tone: 'success', message: 'Report copied to clipboard.' })
     } catch {
-      setShareState('Sharing is unavailable in this browser.')
+      setStatus({ tone: 'error', message: 'Sharing is unavailable in this browser.' })
     }
+  }
+
+  function handleSearchError(message) {
+    setStatus({ tone: 'error', message })
   }
 
   return (
@@ -131,9 +156,9 @@ export default function HomePage() {
       <section className="hero" aria-labelledby="hero-title">
         <div className="hero__content">
           <p className="section-label">Research workspace</p>
-          <h1 id="hero-title">AI Investment Research Made Simple</h1>
+          <h1 id="hero-title">Investment Research Made Simple</h1>
           <p className="hero__copy">
-            Research any publicly traded company using AI. Generate structured investment reports using
+            Research any publicly traded company in seconds. Generate structured investment reports using
             financial statements, market data, earnings reports, and recent news.
           </p>
         </div>
@@ -143,6 +168,7 @@ export default function HomePage() {
             onResult={setResult}
             onQueryChange={setQuery}
             onLoadingChange={setLoading}
+            onError={handleSearchError}
           />
         </div>
       </section>
@@ -188,11 +214,6 @@ export default function HomePage() {
                 <div className="report-preview__line" />
                 <div className="report-preview__line" />
               </div>
-              <div className="report-preview__card">
-                <div className="report-preview__title">Signal Snapshot</div>
-                <div className="report-preview__line report-preview__line--wide" />
-                <div className="report-preview__line" />
-              </div>
             </div>
             <p className="empty-state__hint">Enter a company name or ticker to generate a structured report.</p>
           </div>
@@ -209,7 +230,14 @@ export default function HomePage() {
                 Share Report
               </button>
             </div>
-            {shareState ? <p className="share-status">{shareState}</p> : null}
+            {status.message ? (
+              <p
+                className="share-status"
+                role={status.tone === 'error' ? 'alert' : 'status'}
+              >
+                {status.message}
+              </p>
+            ) : null}
 
             {brokerLinks.length > 0 ? (
               <section className="investing-strip" aria-labelledby="broker-title">
@@ -233,7 +261,7 @@ export default function HomePage() {
             ) : null}
 
             <details className="debug-panel">
-              <summary>LLM transcript</summary>
+              <summary>Analysis transcript</summary>
               <pre>{JSON.stringify(result.transcript, null, 2)}</pre>
             </details>
           </div>

@@ -1,5 +1,3 @@
-const OPENAI_MODEL = process.env.OPENAI_MODEL || 'gpt-3.5-turbo';
-
 /**
  * Resolve a company name or ticker to a symbol that Finnhub/Yahoo can understand.
  * - If the input already looks like a ticker (letters, numbers, dot) → uppercase it.
