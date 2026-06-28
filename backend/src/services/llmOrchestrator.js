@@ -10,7 +10,7 @@ const TEMPERATURE = Number(process.env.LLM_TEMPERATURE ?? 0.2)
 
 // -------- Gemini models and usage tracker (free‑tier quota, PT‑aligned, multi-model) --------
 const USAGE_FILE = path.join(process.cwd(), 'gemini_usage.json')
-const DAILY_LIMIT = 20 // free‑tier limit per model
+const DAILY_LIMIT = 60 // free‑tier limit per model
 
 // Available Gemini models to rotate through - each has its own quota
 const GEMINI_MODELS = [
